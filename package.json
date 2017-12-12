@@ -1,0 +1,11 @@
+{
+	"name": "chat_room",
+	"version": "0.0.1",
+	"description": "Node.js",
+	"author": "First Last",
+	"main": "./index.js",
+	"devDependencies": {
+		"babel-cli": "^6.26.0",
+		"babel-preset-env": "^1.6.1"
+	}
+}

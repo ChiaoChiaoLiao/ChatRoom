@@ -19,25 +19,59 @@ class TodoItems extends React.Component {
 }
 
 class AddTodoForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {todoText: ""};
+        this.handleTodoChange = this.handleTodoChange.bind(this);
+        this.handleAddTodoItem = this.handleAddTodoItem.bind(this);
+    }
+    handleTodoChange(e) {
+        this.setState({todoText: e.target.value});
+    }
+    handleAddTodoItem() {
+        // console.log(this.state.todoText);
+        // 如何將資料新增到TodoItems中?
+        // 呼叫以props傳進來的addItem
+        this.props.addItem(this.state.todoText);
+    }
     render() {
         return (
-            <div>我用來增加TodoItem</div>
+            <div>
+                <input type="text"
+                       value={this.state.todoText}
+                       onChange={this.handleTodoChange}/>
+                <button
+                    onClick={this.handleAddTodoItem}>Add Todo Item</button>
+            </div>
         );
     }
 }
 
 class TodoList extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleAddTodoItem = this.handleAddTodoItem.bind(this);
+        this.state = {
+            todoItems: [
+                {id: 1, data: "Item 1"},
+                {id: 2, data: "Item 2"}
+            ]
+        }
+    }
+    handleAddTodoItem(todoText) {
+        var items = this.state.todoItems;
+        items.push({
+            id: items.length + 1,
+            data: todoText
+        });
+        this.setState({todoItems: items});
+    }
     render() {
-        var todoItems = [
-            {id: 1, data: "Item 1"},
-            {id: 2, data: "Item 2"}
-        ];
         return(
             <div className="todoList">
-                <h1>我是一個TodoList容器</h1>
-                <h2>我組合了TodoItems以及AddTodoForm兩個元件</h2>
-                <TodoItems items={todoItems}/>
-                <AddTodoForm />
+                <h1>Todo List</h1>
+                <TodoItems items={this.state.todoItems}/>
+                <AddTodoForm addItem={this.handleAddTodoItem}/>
             </div>
         );
     }

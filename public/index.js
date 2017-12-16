@@ -1,83 +1,122 @@
-class TodoItem extends React.Component {
+var React = require('react');
+var ReactDOM = require('react-dom');
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Avatar from 'material-ui/Avatar';
+class MessageItem extends React.Component {
     render() {
-        return (<li key={this.props.key}>{this.props.children}</li>);
+        var inlineStyle = {
+            display: "inline-block",
+            verticalAlign: "middle"
+        }
+        var userStyle = {
+            margin: "0",
+            marginLeft: "15px"
+        }
+        var messageStyle = {
+            margin: "15px",
+            marginTop: "7px"
+        }
+
+        return (
+            <div>
+                <MuiThemeProvider style={inlineStyle}>
+                    <Avatar>A</Avatar>
+                </MuiThemeProvider>
+                <div style={inlineStyle}>
+                    <h3 style={userStyle}>James Stuart</h3>
+                    <h4 style={messageStyle}>Training Manager</h4>
+                </div>
+            </div>
+        );
     }
 }
 
-class TodoItems extends React.Component {
+class MessageList extends React.Component {
+    componentDidUpdate() {
+        var node = ReactDOM.findDOMNode(this);
+        node.scrollTop = node.scrollHeight;
+    }
     render() {
         var displayItems = this.props.items.map(function (item) {
             // return (<li key={item.id}>{item.data}</li>);
-            return (<TodoItem key={item.id}>{item.data}</TodoItem>);
+            return (<MessageItem key={item.id}>{item.data}</MessageItem>);
         });
+        var scrollStyle = {
+            overflow: "auto",
+            height: "600px"
+        }
         return (
-            <div>
+            <div style={scrollStyle}>
                 <ul>{displayItems}</ul>
             </div>
         );
     }
 }
 
-class AddTodoForm extends React.Component {
+class AddMessageForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {todoText: ""};
-        this.handleTodoChange = this.handleTodoChange.bind(this);
-        this.handleAddTodoItem = this.handleAddTodoItem.bind(this);
+        this.state = {messageText: ""};
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.handleAddMessageItem = this.handleAddMessageItem.bind(this);
     }
-    handleTodoChange(e) {
-        this.setState({todoText: e.target.value});
+    handleTextChange(e) {
+        this.setState({messageText: e.target.value});
     }
-    handleAddTodoItem() {
-        // console.log(this.state.todoText);
-        // 如何將資料新增到TodoItems中?
-        // 呼叫以props傳進來的addItem
-        this.props.addItem(this.state.todoText);
+    handleAddMessageItem() {
+        this.props.addItem(this.state.messageText);
+        this.setState({messageText: ""});
     }
     render() {
         return (
             <div>
                 <input type="text"
-                       value={this.state.todoText}
-                       onChange={this.handleTodoChange}/>
+                       value={this.state.messageText}
+                       onChange={this.handleTextChange}/>
                 <button
-                    onClick={this.handleAddTodoItem}>Add Todo Item</button>
+                    onClick={this.handleAddMessageItem}>Send Message</button>
             </div>
         );
     }
 }
 
-class TodoList extends React.Component {
+class ChatRoom extends React.Component {
     constructor(props) {
         super(props);
-        this.handleAddTodoItem = this.handleAddTodoItem.bind(this);
+        this.handleAddMessageItem = this.handleAddMessageItem.bind(this);
         this.state = {
-            todoItems: [
+            messageItems: [
                 {id: 1, data: "Item 1"},
-                {id: 2, data: "Item 2"}
+                {id: 2, data: "Item 2"},
+                {id: 3, data: "Item 2"},
+                {id: 4, data: "Item 2"},
+                {id: 5, data: "Item 2"},
+                {id: 6, data: "Item 2"},
+                {id: 7, data: "Item 2"},
+                {id: 8, data: "Item 2"}
             ]
         }
     }
-    handleAddTodoItem(todoText) {
-        var items = this.state.todoItems;
+    handleAddMessageItem(text) {
+        var items = this.state.messageItems;
         items.push({
             id: items.length + 1,
-            data: todoText
+            data: text
         });
-        this.setState({todoItems: items});
+        this.setState({messageItems: items});
     }
     render() {
         return(
-            <div className="todoList">
-                <h1>Todo List</h1>
-                <TodoItems items={this.state.todoItems}/>
-                <AddTodoForm addItem={this.handleAddTodoItem}/>
+            <div className="messageList">
+                <h1>Chatting Room</h1>
+                <MessageList items={this.state.messageItems} id="messageList"/>
+                <AddMessageForm addItem={this.handleAddMessageItem}/>
             </div>
         );
     }
 }
 
 ReactDOM.render(
-    <TodoList />,
+    <ChatRoom />,
     document.getElementById("root")
 );

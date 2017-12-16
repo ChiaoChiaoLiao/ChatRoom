@@ -31,7 +31,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify public/index.js -t babelify -o build.js"
+    "build": "browserify public/index.js -t babelify -o public/build.js"
   },
   "repository": {
     "type": "git",

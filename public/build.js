@@ -25877,10 +25877,13 @@ var ReactDOM = require('react-dom');
 var MessageItem = function (_React$Component) {
     _inherits(MessageItem, _React$Component);
 
-    function MessageItem() {
+    function MessageItem(props) {
         _classCallCheck(this, MessageItem);
 
-        return _possibleConstructorReturn(this, (MessageItem.__proto__ || Object.getPrototypeOf(MessageItem)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (MessageItem.__proto__ || Object.getPrototypeOf(MessageItem)).call(this, props));
+
+        _this.state = { messageText: "" };
+        return _this;
     }
 
     _createClass(MessageItem, [{
@@ -25898,7 +25901,6 @@ var MessageItem = function (_React$Component) {
                 margin: "15px",
                 marginTop: "7px"
             };
-
             return React.createElement(
                 'div',
                 null,
@@ -25908,7 +25910,7 @@ var MessageItem = function (_React$Component) {
                     React.createElement(
                         _Avatar2.default,
                         null,
-                        'A'
+                        this.props.user.charAt(0)
                     )
                 ),
                 React.createElement(
@@ -25917,12 +25919,12 @@ var MessageItem = function (_React$Component) {
                     React.createElement(
                         'h3',
                         { style: userStyle },
-                        'James Stuart'
+                        this.props.user
                     ),
                     React.createElement(
                         'h4',
                         { style: messageStyle },
-                        'Training Manager'
+                        this.props.content
                     )
                 )
             );
@@ -25951,16 +25953,12 @@ var MessageList = function (_React$Component2) {
         key: 'render',
         value: function render() {
             var displayItems = this.props.items.map(function (item) {
-                // return (<li key={item.id}>{item.data}</li>);
-                return React.createElement(
-                    MessageItem,
-                    { key: item.id },
-                    item.data
-                );
+                return React.createElement(MessageItem, { key: item.id, content: item.data, user: item.user });
             });
             var scrollStyle = {
                 overflow: "auto",
-                height: "600px"
+                height: "600px",
+                width: "50%"
             };
             return React.createElement(
                 'div',
@@ -25987,6 +25985,7 @@ var AddMessageForm = function (_React$Component3) {
 
         _this3.state = { messageText: "" };
         _this3.handleTextChange = _this3.handleTextChange.bind(_this3);
+        _this3.handleKeyUp = _this3.handleKeyUp.bind(_this3);
         _this3.handleAddMessageItem = _this3.handleAddMessageItem.bind(_this3);
         return _this3;
     }
@@ -25994,7 +25993,17 @@ var AddMessageForm = function (_React$Component3) {
     _createClass(AddMessageForm, [{
         key: 'handleTextChange',
         value: function handleTextChange(e) {
+            if (event.key === 'Enter') {
+                this.handleAddMessageItem();
+            }
             this.setState({ messageText: e.target.value });
+        }
+    }, {
+        key: 'handleKeyUp',
+        value: function handleKeyUp(e) {
+            if (e.key === 'Enter') {
+                this.handleAddMessageItem();
+            }
         }
     }, {
         key: 'handleAddMessageItem',
@@ -26005,17 +26014,25 @@ var AddMessageForm = function (_React$Component3) {
     }, {
         key: 'render',
         value: function render() {
+            var _this4 = this;
+
+            var submitStyle = {
+                marginTop: "15px"
+            };
             return React.createElement(
                 'div',
                 null,
                 React.createElement('input', { type: 'text',
                     value: this.state.messageText,
+                    onKeyUp: function onKeyUp(e) {
+                        return _this4.handleKeyUp(e);
+                    },
                     onChange: this.handleTextChange }),
                 React.createElement(
                     'button',
                     {
                         onClick: this.handleAddMessageItem },
-                    'Send Message'
+                    'Submit'
                 )
             );
         }
@@ -26030,13 +26047,13 @@ var ChatRoom = function (_React$Component4) {
     function ChatRoom(props) {
         _classCallCheck(this, ChatRoom);
 
-        var _this4 = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
 
-        _this4.handleAddMessageItem = _this4.handleAddMessageItem.bind(_this4);
-        _this4.state = {
-            messageItems: [{ id: 1, data: "Item 1" }, { id: 2, data: "Item 2" }, { id: 3, data: "Item 2" }, { id: 4, data: "Item 2" }, { id: 5, data: "Item 2" }, { id: 6, data: "Item 2" }, { id: 7, data: "Item 2" }, { id: 8, data: "Item 2" }]
+        _this5.handleAddMessageItem = _this5.handleAddMessageItem.bind(_this5);
+        _this5.state = {
+            messageItems: []
         };
-        return _this4;
+        return _this5;
     }
 
     _createClass(ChatRoom, [{
@@ -26045,13 +26062,18 @@ var ChatRoom = function (_React$Component4) {
             var items = this.state.messageItems;
             items.push({
                 id: items.length + 1,
-                data: text
+                data: text,
+                user: "ABC"
             });
             this.setState({ messageItems: items });
         }
     }, {
         key: 'render',
         value: function render() {
+            var lineStyle = {
+                width: "50%",
+                marginLeft: "0"
+            };
             return React.createElement(
                 'div',
                 { className: 'messageList' },
@@ -26061,6 +26083,7 @@ var ChatRoom = function (_React$Component4) {
                     'Chatting Room'
                 ),
                 React.createElement(MessageList, { items: this.state.messageItems, id: 'messageList' }),
+                React.createElement('hr', { style: lineStyle }),
                 React.createElement(AddMessageForm, { addItem: this.handleAddMessageItem })
             );
         }

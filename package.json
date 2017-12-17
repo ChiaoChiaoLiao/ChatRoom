@@ -23,6 +23,7 @@
     "es6-require": "^0.2.1",
     "firebase": "^4.6.0",
     "material-ui": "^0.20.0",
+    "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-material-icons": "^1.0.3"

@@ -67717,47 +67717,161 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var PropTypes = require('prop-types');
 
 
 var FirestoreDB = (0, _firebaseConfig.GetFirestore)();
+var userName = "";
 
-var MessageItem = function (_React$Component) {
-    _inherits(MessageItem, _React$Component);
+var Modal = function (_React$Component) {
+    _inherits(Modal, _React$Component);
+
+    function Modal(props) {
+        _classCallCheck(this, Modal);
+
+        var _this = _possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).call(this, props));
+
+        _this.state = { name: "" };
+        _this.handleTextChange = _this.handleTextChange.bind(_this);
+        return _this;
+    }
+
+    _createClass(Modal, [{
+        key: 'handleTextChange',
+        value: function handleTextChange(e) {
+            userName = e.target.value;
+            this.setState({ name: e.target.value });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            if (!this.props.show) {
+                return null;
+            }
+            var backdropStyle = {
+                position: 'fixed',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                backgroundColor: 'rgba(0,0,0,0.3)',
+                padding: 50
+            };
+            var modalStyle = {
+                backgroundColor: '#fff',
+                borderRadius: 5,
+                maxWidth: 500,
+                minHeight: 250,
+                margin: '0 auto',
+                padding: 30
+            };
+            var contentStyle = {
+                textAlign: "center"
+            };
+            var inputStyle = {
+                margin: "10px"
+            };
+            var buttonStyle = {
+                margin: "50px"
+            };
+            var hintStyle = {
+                color: "#808080"
+            };
+            return React.createElement(
+                'div',
+                { className: 'backdrop', style: backdropStyle },
+                React.createElement(
+                    'div',
+                    { className: 'modal', style: modalStyle },
+                    this.props.children,
+                    React.createElement(
+                        'div',
+                        { style: contentStyle },
+                        React.createElement(
+                            'h3',
+                            null,
+                            'What\'s your name?'
+                        ),
+                        React.createElement('input', { type: 'text',
+                            style: inputStyle,
+                            value: this.state.name,
+                            onChange: this.handleTextChange }),
+                        React.createElement(
+                            'h6',
+                            { style: hintStyle },
+                            'Hint: Your name cannot be empty.'
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'footer', style: buttonStyle },
+                            React.createElement(
+                                'button',
+                                { onClick: this.props.onClose },
+                                'OK'
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Modal;
+}(React.Component);
+
+Modal.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    show: PropTypes.bool,
+    children: PropTypes.node
+};
+
+function isEmptyOrSpaces(str) {
+    return str === null || str.match(/^ *$/) !== null;
+}
+
+var MessageItem = function (_React$Component2) {
+    _inherits(MessageItem, _React$Component2);
 
     function MessageItem(props) {
         _classCallCheck(this, MessageItem);
 
-        var _this = _possibleConstructorReturn(this, (MessageItem.__proto__ || Object.getPrototypeOf(MessageItem)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (MessageItem.__proto__ || Object.getPrototypeOf(MessageItem)).call(this, props));
 
-        _this.state = { messageText: "" };
-        return _this;
+        _this2.state = { messageText: "" };
+        return _this2;
     }
 
     _createClass(MessageItem, [{
         key: 'render',
         value: function render() {
+            var blockStyle = {
+                margin: "10px"
+            };
             var inlineStyle = {
                 display: "inline-block",
                 verticalAlign: "middle"
             };
-            var userStyle = {
+            var textStyle = {
                 margin: "0",
                 marginLeft: "15px"
             };
-            var messageStyle = {
-                margin: "15px",
-                marginTop: "7px"
+            var timeStyle = {
+                margin: "0",
+                marginLeft: "15px",
+                color: "#808080"
             };
+            var timestamp = new Date(this.props.timestamp);
+            var date = timestamp.getHours() + ":" + timestamp.getMinutes() + " " + timestamp.getFullYear() + "/" + (timestamp.getMonth() + 1) + "/" + timestamp.getDate();
             return React.createElement(
                 'div',
-                null,
+                { style: blockStyle },
                 React.createElement(
                     _MuiThemeProvider2.default,
                     { style: inlineStyle },
                     React.createElement(
                         _Avatar2.default,
                         null,
-                        this.props.user.substring(0, 2)
+                        this.props.user.substring(0, 2).toUpperCase()
                     )
                 ),
                 React.createElement(
@@ -67765,13 +67879,18 @@ var MessageItem = function (_React$Component) {
                     { style: inlineStyle },
                     React.createElement(
                         'h3',
-                        { style: userStyle },
+                        { style: textStyle },
                         this.props.user
                     ),
                     React.createElement(
                         'h4',
-                        { style: messageStyle },
+                        { style: textStyle },
                         this.props.content
+                    ),
+                    React.createElement(
+                        'h6',
+                        { style: timeStyle },
+                        date
                     )
                 )
             );
@@ -67781,8 +67900,8 @@ var MessageItem = function (_React$Component) {
     return MessageItem;
 }(React.Component);
 
-var MessageList = function (_React$Component2) {
-    _inherits(MessageList, _React$Component2);
+var MessageList = function (_React$Component3) {
+    _inherits(MessageList, _React$Component3);
 
     function MessageList() {
         _classCallCheck(this, MessageList);
@@ -67800,7 +67919,7 @@ var MessageList = function (_React$Component2) {
         key: 'render',
         value: function render() {
             var displayItems = this.props.items.map(function (item) {
-                return React.createElement(MessageItem, { key: item.id, content: item.data, user: item.user });
+                return React.createElement(MessageItem, { key: item.id, content: item.data, user: item.user, timestamp: item.timestamp });
             });
             var scrollStyle = {
                 overflow: "auto",
@@ -67822,25 +67941,25 @@ var MessageList = function (_React$Component2) {
     return MessageList;
 }(React.Component);
 
-var AddMessageForm = function (_React$Component3) {
-    _inherits(AddMessageForm, _React$Component3);
+var AddMessageForm = function (_React$Component4) {
+    _inherits(AddMessageForm, _React$Component4);
 
     function AddMessageForm(props) {
         _classCallCheck(this, AddMessageForm);
 
-        var _this3 = _possibleConstructorReturn(this, (AddMessageForm.__proto__ || Object.getPrototypeOf(AddMessageForm)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (AddMessageForm.__proto__ || Object.getPrototypeOf(AddMessageForm)).call(this, props));
 
-        _this3.state = { messageText: "" };
-        _this3.handleTextChange = _this3.handleTextChange.bind(_this3);
-        _this3.handleKeyUp = _this3.handleKeyUp.bind(_this3);
-        _this3.handleAddMessageToFirestore = _this3.handleAddMessageToFirestore.bind(_this3);
-        return _this3;
+        _this4.state = { messageText: "" };
+        _this4.handleTextChange = _this4.handleTextChange.bind(_this4);
+        _this4.handleKeyUp = _this4.handleKeyUp.bind(_this4);
+        _this4.handleAddMessageToFirestore = _this4.handleAddMessageToFirestore.bind(_this4);
+        return _this4;
     }
 
     _createClass(AddMessageForm, [{
         key: 'handleTextChange',
         value: function handleTextChange(e) {
-            if (event.key === 'Enter') {
+            if (event.key === 'Enter' && !isEmptyOrSpaces(e.target.value)) {
                 this.handleAddMessageToFirestore();
             }
             this.setState({ messageText: e.target.value });
@@ -67848,38 +67967,37 @@ var AddMessageForm = function (_React$Component3) {
     }, {
         key: 'handleKeyUp',
         value: function handleKeyUp(e) {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !isEmptyOrSpaces(e.target.value)) {
                 this.handleAddMessageToFirestore();
             }
         }
     }, {
         key: 'handleAddMessageToFirestore',
         value: function handleAddMessageToFirestore() {
-            (0, _firestoreUtils.AddMessageToFirestore)("ABC", this.state.messageText);
-            this.setState({ messageText: "" });
+            if (!isEmptyOrSpaces(this.state.messageText)) {
+                (0, _firestoreUtils.AddMessageToFirestore)(userName, this.state.messageText);
+                this.setState({ messageText: "" });
+            }
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this4 = this;
+            var _this5 = this;
 
-            var submitStyle = {
-                marginTop: "15px"
-            };
             return React.createElement(
                 'div',
                 null,
                 React.createElement('input', { type: 'text',
                     value: this.state.messageText,
                     onKeyUp: function onKeyUp(e) {
-                        return _this4.handleKeyUp(e);
+                        return _this5.handleKeyUp(e);
                     },
                     onChange: this.handleTextChange }),
                 React.createElement(
                     'button',
                     {
                         onClick: this.handleAddMessageToFirestore },
-                    'Submit'
+                    'Send'
                 )
             );
         }
@@ -67888,22 +68006,21 @@ var AddMessageForm = function (_React$Component3) {
     return AddMessageForm;
 }(React.Component);
 
-var ChatRoom = function (_React$Component4) {
-    _inherits(ChatRoom, _React$Component4);
+var ChatRoom = function (_React$Component5) {
+    _inherits(ChatRoom, _React$Component5);
 
     function ChatRoom(props) {
         _classCallCheck(this, ChatRoom);
 
-        console.log("construct ChatRoom");
+        var _this6 = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
 
-        var _this5 = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
-
-        _this5.handleAddMessageItem = _this5.handleAddMessageItem.bind(_this5);
-        _this5.state = {
-            messageItems: []
+        _this6.handleAddMessageItem = _this6.handleAddMessageItem.bind(_this6);
+        _this6.toggleModal = _this6.toggleModal.bind(_this6);
+        _this6.state = {
+            messageItems: [],
+            isOpen: true
         };
-        ListenToFirestore(_this5);
-        return _this5;
+        return _this6;
     }
 
     _createClass(ChatRoom, [{
@@ -67915,11 +68032,23 @@ var ChatRoom = function (_React$Component4) {
                 items.push({
                     id: doc.id,
                     data: doc.data().message,
-                    user: doc.data().name
+                    user: doc.data().name,
+                    timestamp: doc.data().timestamp
                 });
             });
-            console.log("Current cities in CA: ", items.join(", "));
             classThis.setState({ messageItems: items });
+        }
+    }, {
+        key: 'toggleModal',
+        value: function toggleModal() {
+            console.log("toggle  " + userName);
+            if (isEmptyOrSpaces(userName)) {
+                return;
+            }
+            ListenToFirestore(this);
+            this.setState({
+                isOpen: !this.state.isOpen
+            });
         }
     }, {
         key: 'render',
@@ -67936,6 +68065,7 @@ var ChatRoom = function (_React$Component4) {
                     null,
                     'Chatting Room'
                 ),
+                React.createElement(Modal, { show: this.state.isOpen, onClose: this.toggleModal }),
                 React.createElement(MessageList, { items: this.state.messageItems, id: 'messageList' }),
                 React.createElement('hr', { style: lineStyle }),
                 React.createElement(AddMessageForm, null)
@@ -67948,14 +68078,14 @@ var ChatRoom = function (_React$Component4) {
 
 function ListenToFirestore(classThis) {
     FirestoreDB.where("timestamp", ">", 0).onSnapshot(function (querySnapshot) {
-        console.log("get firestore snapshot");
+        console.log("listen to firestore");
         ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot, []);
     });
 }
 
 ReactDOM.render(React.createElement(ChatRoom, null), document.getElementById("root"));
 
-},{"./utils/firebase-config.js":422,"./utils/firestore-utils.js":423,"material-ui/Avatar":390,"material-ui/styles/MuiThemeProvider":391,"react":417,"react-dom":414}],422:[function(require,module,exports){
+},{"./utils/firebase-config.js":422,"./utils/firestore-utils.js":423,"material-ui/Avatar":390,"material-ui/styles/MuiThemeProvider":391,"prop-types":410,"react":417,"react-dom":414}],422:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

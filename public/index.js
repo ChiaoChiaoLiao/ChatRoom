@@ -1,7 +1,12 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+const React = require('react');
+const ReactDOM = require('react-dom');
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Avatar from 'material-ui/Avatar';
+import {GetFirestore} from './utils/firebase-config.js';
+import {AddMessageToFirestore} from './utils/firestore-utils.js';
+
+const FirestoreDB = GetFirestore();
+
 class MessageItem extends React.Component {
     constructor(props) {
         super(props);
@@ -23,7 +28,7 @@ class MessageItem extends React.Component {
         return (
             <div>
                 <MuiThemeProvider style={inlineStyle}>
-                    <Avatar>{this.props.user.charAt(0)}</Avatar>
+                    <Avatar>{this.props.user.substring(0, 2)}</Avatar>
                 </MuiThemeProvider>
                 <div style={inlineStyle}>
                     <h3 style={userStyle}>{this.props.user}</h3>
@@ -62,21 +67,21 @@ class AddMessageForm extends React.Component {
         this.state = {messageText: ""};
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleKeyUp = this.handleKeyUp.bind(this);
-        this.handleAddMessageItem = this.handleAddMessageItem.bind(this);
+        this.handleAddMessageToFirestore = this.handleAddMessageToFirestore.bind(this);
     }
     handleTextChange(e) {
         if (event.key === 'Enter') {
-            this.handleAddMessageItem();
+            this.handleAddMessageToFirestore();
         }
         this.setState({messageText: e.target.value});
     }
     handleKeyUp(e) {
         if (e.key === 'Enter') {
-            this.handleAddMessageItem();
+            this.handleAddMessageToFirestore();
         }
     }
-    handleAddMessageItem() {
-        this.props.addItem(this.state.messageText);
+    handleAddMessageToFirestore() {
+        AddMessageToFirestore("ABC", this.state.messageText);
         this.setState({messageText: ""});
     }
     render() {
@@ -90,7 +95,7 @@ class AddMessageForm extends React.Component {
                        onKeyUp={(e) => this.handleKeyUp(e)}
                        onChange={this.handleTextChange}/>
                 <button
-                    onClick={this.handleAddMessageItem}>Submit</button>
+                    onClick={this.handleAddMessageToFirestore}>Submit</button>
             </div>
         );
     }
@@ -98,20 +103,26 @@ class AddMessageForm extends React.Component {
 
 class ChatRoom extends React.Component {
     constructor(props) {
+        console.log("construct ChatRoom");
         super(props);
         this.handleAddMessageItem = this.handleAddMessageItem.bind(this);
         this.state = {
             messageItems: []
         }
+        ListenToFirestore(this);
     }
-    handleAddMessageItem(text) {
-        var items = this.state.messageItems;
-        items.push({
-            id: items.length + 1,
-            data: text,
-            user: "ABC"
+    handleAddMessageItem(classThis, snapshot, items) {
+        console.log("add item snapshot ", snapshot);
+
+        snapshot.forEach(function(doc) {
+            items.push({
+                id: doc.id,
+                data: doc.data().message,
+                user: doc.data().name
+            });
         });
-        this.setState({messageItems: items});
+        console.log("Current cities in CA: ", items.join(", "));
+        classThis.setState({messageItems: items});
     }
     render() {
         var lineStyle = {
@@ -123,10 +134,18 @@ class ChatRoom extends React.Component {
                 <h1>Chatting Room</h1>
                 <MessageList items={this.state.messageItems} id="messageList"/>
                 <hr style={lineStyle}/>
-                <AddMessageForm addItem={this.handleAddMessageItem}/>
+                <AddMessageForm/>
             </div>
         );
     }
+}
+
+function ListenToFirestore(classThis) {
+    FirestoreDB.where("timestamp", ">", 0)
+    .onSnapshot(function(querySnapshot) {
+        console.log("get firestore snapshot");
+        ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot, []);
+    });
 }
 
 ReactDOM.render(

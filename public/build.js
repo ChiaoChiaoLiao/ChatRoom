@@ -67693,19 +67693,21 @@ module.exports = warning;
 },{"_process":405}],421:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _MuiThemeProvider = require('material-ui/styles/MuiThemeProvider');
+var _MessageList = require('./MessageList.js');
 
-var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+var _MessageList2 = _interopRequireDefault(_MessageList);
 
-var _Avatar = require('material-ui/Avatar');
+var _firebaseConfig = require('../utils/firebase-config.js');
 
-var _Avatar2 = _interopRequireDefault(_Avatar);
+var _firestoreUtils = require('../utils/firestore-utils.js');
 
-var _firebaseConfig = require('./utils/firebase-config.js');
-
-var _firestoreUtils = require('./utils/firestore-utils.js');
+var _functions = require('../utils/functions.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67825,20 +67827,188 @@ Modal.propTypes = {
     children: PropTypes.node
 };
 
-function isEmptyOrSpaces(str) {
-    return str === null || str.match(/^ *$/) !== null;
+var AddMessageForm = function (_React$Component2) {
+    _inherits(AddMessageForm, _React$Component2);
+
+    function AddMessageForm(props) {
+        _classCallCheck(this, AddMessageForm);
+
+        var _this2 = _possibleConstructorReturn(this, (AddMessageForm.__proto__ || Object.getPrototypeOf(AddMessageForm)).call(this, props));
+
+        _this2.state = { messageText: "" };
+        _this2.handleTextChange = _this2.handleTextChange.bind(_this2);
+        _this2.handleKeyUp = _this2.handleKeyUp.bind(_this2);
+        _this2.handleAddMessageToFirestore = _this2.handleAddMessageToFirestore.bind(_this2);
+        return _this2;
+    }
+
+    _createClass(AddMessageForm, [{
+        key: 'handleTextChange',
+        value: function handleTextChange(e) {
+            if (event.key === 'Enter' && !(0, _functions.isEmptyOrSpaces)(e.target.value)) {
+                this.handleAddMessageToFirestore();
+            }
+            this.setState({ messageText: e.target.value });
+        }
+    }, {
+        key: 'handleKeyUp',
+        value: function handleKeyUp(e) {
+            if (e.key === 'Enter' && !(0, _functions.isEmptyOrSpaces)(e.target.value)) {
+                this.handleAddMessageToFirestore();
+            }
+        }
+    }, {
+        key: 'handleAddMessageToFirestore',
+        value: function handleAddMessageToFirestore() {
+            if (!(0, _functions.isEmptyOrSpaces)(this.state.messageText)) {
+                (0, _firestoreUtils.AddMessageToFirestore)(userName, this.state.messageText);
+                this.setState({ messageText: "" });
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            return React.createElement(
+                'div',
+                null,
+                React.createElement('input', { type: 'text',
+                    value: this.state.messageText,
+                    onKeyUp: function onKeyUp(e) {
+                        return _this3.handleKeyUp(e);
+                    },
+                    onChange: this.handleTextChange }),
+                React.createElement(
+                    'button',
+                    {
+                        onClick: this.handleAddMessageToFirestore },
+                    'Send'
+                )
+            );
+        }
+    }]);
+
+    return AddMessageForm;
+}(React.Component);
+
+var ChatRoom = function (_React$Component3) {
+    _inherits(ChatRoom, _React$Component3);
+
+    function ChatRoom(props) {
+        _classCallCheck(this, ChatRoom);
+
+        var _this4 = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
+
+        _this4.handleAddMessageItem = _this4.handleAddMessageItem.bind(_this4);
+        _this4.toggleModal = _this4.toggleModal.bind(_this4);
+        _this4.state = {
+            messageItems: [],
+            isOpen: true
+        };
+        return _this4;
+    }
+
+    _createClass(ChatRoom, [{
+        key: 'handleAddMessageItem',
+        value: function handleAddMessageItem(classThis, snapshot, items) {
+            console.log("add item snapshot ", snapshot);
+
+            snapshot.forEach(function (doc) {
+                items.push({
+                    id: doc.id,
+                    data: doc.data().message,
+                    user: doc.data().name,
+                    timestamp: doc.data().timestamp
+                });
+            });
+            classThis.setState({ messageItems: items });
+        }
+    }, {
+        key: 'toggleModal',
+        value: function toggleModal() {
+            console.log("toggle  " + userName);
+            if ((0, _functions.isEmptyOrSpaces)(userName)) {
+                return;
+            }
+            ListenToFirestore(this);
+            this.setState({
+                isOpen: !this.state.isOpen
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var lineStyle = {
+                width: "50%",
+                marginLeft: "0"
+            };
+            return React.createElement(
+                'div',
+                { className: 'messageList' },
+                React.createElement(
+                    'h1',
+                    null,
+                    'Chatting Room'
+                ),
+                React.createElement(Modal, { show: this.state.isOpen, onClose: this.toggleModal }),
+                React.createElement(_MessageList2.default, { items: this.state.messageItems, id: 'messageList' }),
+                React.createElement('hr', { style: lineStyle }),
+                React.createElement(AddMessageForm, null)
+            );
+        }
+    }]);
+
+    return ChatRoom;
+}(React.Component);
+
+function ListenToFirestore(classThis) {
+    FirestoreDB.where("timestamp", ">", 0).onSnapshot(function (querySnapshot) {
+        console.log("listen to firestore");
+        ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot, []);
+    });
 }
 
-var MessageItem = function (_React$Component2) {
-    _inherits(MessageItem, _React$Component2);
+exports.default = ChatRoom;
+
+},{"../utils/firebase-config.js":424,"../utils/firestore-utils.js":425,"../utils/functions.js":426,"./MessageList.js":422,"prop-types":410,"react":417,"react-dom":414}],422:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _MuiThemeProvider = require('material-ui/styles/MuiThemeProvider');
+
+var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+
+var _Avatar = require('material-ui/Avatar');
+
+var _Avatar2 = _interopRequireDefault(_Avatar);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var React = require('react');
+var ReactDOM = require('react-dom');
+
+var MessageItem = function (_React$Component) {
+    _inherits(MessageItem, _React$Component);
 
     function MessageItem(props) {
         _classCallCheck(this, MessageItem);
 
-        var _this2 = _possibleConstructorReturn(this, (MessageItem.__proto__ || Object.getPrototypeOf(MessageItem)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (MessageItem.__proto__ || Object.getPrototypeOf(MessageItem)).call(this, props));
 
-        _this2.state = { messageText: "" };
-        return _this2;
+        _this.state = { messageText: "" };
+        return _this;
     }
 
     _createClass(MessageItem, [{
@@ -67900,8 +68070,8 @@ var MessageItem = function (_React$Component2) {
     return MessageItem;
 }(React.Component);
 
-var MessageList = function (_React$Component3) {
-    _inherits(MessageList, _React$Component3);
+var MessageList = function (_React$Component2) {
+    _inherits(MessageList, _React$Component2);
 
     function MessageList() {
         _classCallCheck(this, MessageList);
@@ -67941,151 +68111,25 @@ var MessageList = function (_React$Component3) {
     return MessageList;
 }(React.Component);
 
-var AddMessageForm = function (_React$Component4) {
-    _inherits(AddMessageForm, _React$Component4);
+exports.default = MessageList;
 
-    function AddMessageForm(props) {
-        _classCallCheck(this, AddMessageForm);
+},{"material-ui/Avatar":390,"material-ui/styles/MuiThemeProvider":391,"react":417,"react-dom":414}],423:[function(require,module,exports){
+'use strict';
 
-        var _this4 = _possibleConstructorReturn(this, (AddMessageForm.__proto__ || Object.getPrototypeOf(AddMessageForm)).call(this, props));
+var _ChatRoom = require('./components/ChatRoom.js');
 
-        _this4.state = { messageText: "" };
-        _this4.handleTextChange = _this4.handleTextChange.bind(_this4);
-        _this4.handleKeyUp = _this4.handleKeyUp.bind(_this4);
-        _this4.handleAddMessageToFirestore = _this4.handleAddMessageToFirestore.bind(_this4);
-        return _this4;
-    }
+var _ChatRoom2 = _interopRequireDefault(_ChatRoom);
 
-    _createClass(AddMessageForm, [{
-        key: 'handleTextChange',
-        value: function handleTextChange(e) {
-            if (event.key === 'Enter' && !isEmptyOrSpaces(e.target.value)) {
-                this.handleAddMessageToFirestore();
-            }
-            this.setState({ messageText: e.target.value });
-        }
-    }, {
-        key: 'handleKeyUp',
-        value: function handleKeyUp(e) {
-            if (e.key === 'Enter' && !isEmptyOrSpaces(e.target.value)) {
-                this.handleAddMessageToFirestore();
-            }
-        }
-    }, {
-        key: 'handleAddMessageToFirestore',
-        value: function handleAddMessageToFirestore() {
-            if (!isEmptyOrSpaces(this.state.messageText)) {
-                (0, _firestoreUtils.AddMessageToFirestore)(userName, this.state.messageText);
-                this.setState({ messageText: "" });
-            }
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this5 = this;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-            return React.createElement(
-                'div',
-                null,
-                React.createElement('input', { type: 'text',
-                    value: this.state.messageText,
-                    onKeyUp: function onKeyUp(e) {
-                        return _this5.handleKeyUp(e);
-                    },
-                    onChange: this.handleTextChange }),
-                React.createElement(
-                    'button',
-                    {
-                        onClick: this.handleAddMessageToFirestore },
-                    'Send'
-                )
-            );
-        }
-    }]);
+var React = require('react');
+var ReactDOM = require('react-dom');
+var PropTypes = require('prop-types');
 
-    return AddMessageForm;
-}(React.Component);
 
-var ChatRoom = function (_React$Component5) {
-    _inherits(ChatRoom, _React$Component5);
+ReactDOM.render(React.createElement(_ChatRoom2.default, null), document.getElementById("root"));
 
-    function ChatRoom(props) {
-        _classCallCheck(this, ChatRoom);
-
-        var _this6 = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
-
-        _this6.handleAddMessageItem = _this6.handleAddMessageItem.bind(_this6);
-        _this6.toggleModal = _this6.toggleModal.bind(_this6);
-        _this6.state = {
-            messageItems: [],
-            isOpen: true
-        };
-        return _this6;
-    }
-
-    _createClass(ChatRoom, [{
-        key: 'handleAddMessageItem',
-        value: function handleAddMessageItem(classThis, snapshot, items) {
-            console.log("add item snapshot ", snapshot);
-
-            snapshot.forEach(function (doc) {
-                items.push({
-                    id: doc.id,
-                    data: doc.data().message,
-                    user: doc.data().name,
-                    timestamp: doc.data().timestamp
-                });
-            });
-            classThis.setState({ messageItems: items });
-        }
-    }, {
-        key: 'toggleModal',
-        value: function toggleModal() {
-            console.log("toggle  " + userName);
-            if (isEmptyOrSpaces(userName)) {
-                return;
-            }
-            ListenToFirestore(this);
-            this.setState({
-                isOpen: !this.state.isOpen
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var lineStyle = {
-                width: "50%",
-                marginLeft: "0"
-            };
-            return React.createElement(
-                'div',
-                { className: 'messageList' },
-                React.createElement(
-                    'h1',
-                    null,
-                    'Chatting Room'
-                ),
-                React.createElement(Modal, { show: this.state.isOpen, onClose: this.toggleModal }),
-                React.createElement(MessageList, { items: this.state.messageItems, id: 'messageList' }),
-                React.createElement('hr', { style: lineStyle }),
-                React.createElement(AddMessageForm, null)
-            );
-        }
-    }]);
-
-    return ChatRoom;
-}(React.Component);
-
-function ListenToFirestore(classThis) {
-    FirestoreDB.where("timestamp", ">", 0).onSnapshot(function (querySnapshot) {
-        console.log("listen to firestore");
-        ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot, []);
-    });
-}
-
-ReactDOM.render(React.createElement(ChatRoom, null), document.getElementById("root"));
-
-},{"./utils/firebase-config.js":422,"./utils/firestore-utils.js":423,"material-ui/Avatar":390,"material-ui/styles/MuiThemeProvider":391,"prop-types":410,"react":417,"react-dom":414}],422:[function(require,module,exports){
+},{"./components/ChatRoom.js":421,"prop-types":410,"react":417,"react-dom":414}],424:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68111,7 +68155,7 @@ function GetFirestore() {
   return db.collection(DBName);
 }
 
-},{"firebase":360,"firebase/firestore":359}],423:[function(require,module,exports){
+},{"firebase":360,"firebase/firestore":359}],425:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68144,4 +68188,15 @@ function DetatchListener() {
     unsubscribe();
 }
 
-},{"./firebase-config.js":422}]},{},[421]);
+},{"./firebase-config.js":424}],426:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.isEmptyOrSpaces = isEmptyOrSpaces;
+function isEmptyOrSpaces(str) {
+    return str === null || str.match(/^ *$/) !== null;
+}
+
+},{}]},{},[423]);

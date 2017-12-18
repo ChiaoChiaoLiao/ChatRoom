@@ -67699,17 +67699,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _MessageList = require('./MessageList.js');
-
-var _MessageList2 = _interopRequireDefault(_MessageList);
-
-var _firebaseConfig = require('../utils/firebase-config.js');
-
 var _firestoreUtils = require('../utils/firestore-utils.js');
 
 var _functions = require('../utils/functions.js');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -67718,128 +67710,20 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var React = require('react');
-var ReactDOM = require('react-dom');
-var PropTypes = require('prop-types');
 
-
-var FirestoreDB = (0, _firebaseConfig.GetFirestore)();
-var userName = "";
-
-var Modal = function (_React$Component) {
-    _inherits(Modal, _React$Component);
-
-    function Modal(props) {
-        _classCallCheck(this, Modal);
-
-        var _this = _possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).call(this, props));
-
-        _this.state = { name: "" };
-        _this.handleTextChange = _this.handleTextChange.bind(_this);
-        return _this;
-    }
-
-    _createClass(Modal, [{
-        key: 'handleTextChange',
-        value: function handleTextChange(e) {
-            userName = e.target.value;
-            this.setState({ name: e.target.value });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            if (!this.props.show) {
-                return null;
-            }
-            var backdropStyle = {
-                position: 'fixed',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                backgroundColor: 'rgba(0,0,0,0.3)',
-                padding: 50
-            };
-            var modalStyle = {
-                backgroundColor: '#fff',
-                borderRadius: 5,
-                maxWidth: 500,
-                minHeight: 250,
-                margin: '0 auto',
-                padding: 30
-            };
-            var contentStyle = {
-                textAlign: "center"
-            };
-            var inputStyle = {
-                margin: "10px"
-            };
-            var buttonStyle = {
-                margin: "50px"
-            };
-            var hintStyle = {
-                color: "#808080"
-            };
-            return React.createElement(
-                'div',
-                { className: 'backdrop', style: backdropStyle },
-                React.createElement(
-                    'div',
-                    { className: 'modal', style: modalStyle },
-                    this.props.children,
-                    React.createElement(
-                        'div',
-                        { style: contentStyle },
-                        React.createElement(
-                            'h3',
-                            null,
-                            'What\'s your name?'
-                        ),
-                        React.createElement('input', { type: 'text',
-                            style: inputStyle,
-                            value: this.state.name,
-                            onChange: this.handleTextChange }),
-                        React.createElement(
-                            'h6',
-                            { style: hintStyle },
-                            'Hint: Your name cannot be empty.'
-                        ),
-                        React.createElement(
-                            'div',
-                            { className: 'footer', style: buttonStyle },
-                            React.createElement(
-                                'button',
-                                { onClick: this.props.onClose },
-                                'OK'
-                            )
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-
-    return Modal;
-}(React.Component);
-
-Modal.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    show: PropTypes.bool,
-    children: PropTypes.node
-};
-
-var AddMessageForm = function (_React$Component2) {
-    _inherits(AddMessageForm, _React$Component2);
+var AddMessageForm = function (_React$Component) {
+    _inherits(AddMessageForm, _React$Component);
 
     function AddMessageForm(props) {
         _classCallCheck(this, AddMessageForm);
 
-        var _this2 = _possibleConstructorReturn(this, (AddMessageForm.__proto__ || Object.getPrototypeOf(AddMessageForm)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (AddMessageForm.__proto__ || Object.getPrototypeOf(AddMessageForm)).call(this, props));
 
-        _this2.state = { messageText: "" };
-        _this2.handleTextChange = _this2.handleTextChange.bind(_this2);
-        _this2.handleKeyUp = _this2.handleKeyUp.bind(_this2);
-        _this2.handleAddMessageToFirestore = _this2.handleAddMessageToFirestore.bind(_this2);
-        return _this2;
+        _this.state = { messageText: "" };
+        _this.handleTextChange = _this.handleTextChange.bind(_this);
+        _this.handleKeyUp = _this.handleKeyUp.bind(_this);
+        _this.handleAddMessageToFirestore = _this.handleAddMessageToFirestore.bind(_this);
+        return _this;
     }
 
     _createClass(AddMessageForm, [{
@@ -67861,14 +67745,14 @@ var AddMessageForm = function (_React$Component2) {
         key: 'handleAddMessageToFirestore',
         value: function handleAddMessageToFirestore() {
             if (!(0, _functions.isEmptyOrSpaces)(this.state.messageText)) {
-                (0, _firestoreUtils.AddMessageToFirestore)(userName, this.state.messageText);
+                (0, _firestoreUtils.AddMessageToFirestore)(this.props.username, this.state.messageText);
                 this.setState({ messageText: "" });
             }
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this2 = this;
 
             return React.createElement(
                 'div',
@@ -67876,7 +67760,7 @@ var AddMessageForm = function (_React$Component2) {
                 React.createElement('input', { type: 'text',
                     value: this.state.messageText,
                     onKeyUp: function onKeyUp(e) {
-                        return _this3.handleKeyUp(e);
+                        return _this2.handleKeyUp(e);
                     },
                     onChange: this.handleTextChange }),
                 React.createElement(
@@ -67892,21 +67776,63 @@ var AddMessageForm = function (_React$Component2) {
     return AddMessageForm;
 }(React.Component);
 
-var ChatRoom = function (_React$Component3) {
-    _inherits(ChatRoom, _React$Component3);
+exports.default = AddMessageForm;
+
+},{"../utils/firestore-utils.js":427,"../utils/functions.js":428,"react":417}],422:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Modal = require('./Modal.js');
+
+var _Modal2 = _interopRequireDefault(_Modal);
+
+var _MessageList = require('./MessageList.js');
+
+var _MessageList2 = _interopRequireDefault(_MessageList);
+
+var _AddMessageForm = require('./AddMessageForm.js');
+
+var _AddMessageForm2 = _interopRequireDefault(_AddMessageForm);
+
+var _firebaseConfig = require('../utils/firebase-config.js');
+
+var _functions = require('../utils/functions.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var React = require('react');
+
+
+var FirestoreDB = (0, _firebaseConfig.GetFirestore)();
+
+var ChatRoom = function (_React$Component) {
+    _inherits(ChatRoom, _React$Component);
 
     function ChatRoom(props) {
         _classCallCheck(this, ChatRoom);
 
-        var _this4 = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
 
-        _this4.handleAddMessageItem = _this4.handleAddMessageItem.bind(_this4);
-        _this4.toggleModal = _this4.toggleModal.bind(_this4);
-        _this4.state = {
+        _this.handleAddMessageItem = _this.handleAddMessageItem.bind(_this);
+        _this.toggleModal = _this.toggleModal.bind(_this);
+        _this.getUsername = _this.getUsername.bind(_this);
+        _this.state = {
             messageItems: [],
-            isOpen: true
+            isOpen: true,
+            username: ""
         };
-        return _this4;
+        return _this;
     }
 
     _createClass(ChatRoom, [{
@@ -67925,10 +67851,15 @@ var ChatRoom = function (_React$Component3) {
             classThis.setState({ messageItems: items });
         }
     }, {
+        key: 'getUsername',
+        value: function getUsername(name) {
+            this.setState({ username: name });
+        }
+    }, {
         key: 'toggleModal',
         value: function toggleModal() {
-            console.log("toggle  " + userName);
-            if ((0, _functions.isEmptyOrSpaces)(userName)) {
+            console.log("toggle  " + this.state.username);
+            if ((0, _functions.isEmptyOrSpaces)(this.state.username)) {
                 return;
             }
             ListenToFirestore(this);
@@ -67939,22 +67870,33 @@ var ChatRoom = function (_React$Component3) {
     }, {
         key: 'render',
         value: function render() {
+            if (this.state.isOpen) {
+                return React.createElement(
+                    'div',
+                    { className: 'chatRoom' },
+                    React.createElement(
+                        'h1',
+                        null,
+                        'Chatting Room'
+                    ),
+                    React.createElement(_Modal2.default, { show: this.state.isOpen, onClose: this.toggleModal, setUsername: this.getUsername })
+                );
+            }
             var lineStyle = {
                 width: "50%",
                 marginLeft: "0"
             };
             return React.createElement(
                 'div',
-                { className: 'messageList' },
+                { className: 'chatRoom' },
                 React.createElement(
                     'h1',
                     null,
                     'Chatting Room'
                 ),
-                React.createElement(Modal, { show: this.state.isOpen, onClose: this.toggleModal }),
                 React.createElement(_MessageList2.default, { items: this.state.messageItems, id: 'messageList' }),
                 React.createElement('hr', { style: lineStyle }),
-                React.createElement(AddMessageForm, null)
+                React.createElement(_AddMessageForm2.default, { username: this.state.username })
             );
         }
     }]);
@@ -67971,7 +67913,7 @@ function ListenToFirestore(classThis) {
 
 exports.default = ChatRoom;
 
-},{"../utils/firebase-config.js":424,"../utils/firestore-utils.js":425,"../utils/functions.js":426,"./MessageList.js":422,"prop-types":410,"react":417,"react-dom":414}],422:[function(require,module,exports){
+},{"../utils/firebase-config.js":426,"../utils/functions.js":428,"./AddMessageForm.js":421,"./MessageList.js":423,"./Modal.js":424,"react":417}],423:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68113,7 +68055,129 @@ var MessageList = function (_React$Component2) {
 
 exports.default = MessageList;
 
-},{"material-ui/Avatar":390,"material-ui/styles/MuiThemeProvider":391,"react":417,"react-dom":414}],423:[function(require,module,exports){
+},{"material-ui/Avatar":390,"material-ui/styles/MuiThemeProvider":391,"react":417,"react-dom":414}],424:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var React = require('react');
+var PropTypes = require('prop-types');
+
+var Modal = function (_React$Component) {
+    _inherits(Modal, _React$Component);
+
+    function Modal(props) {
+        _classCallCheck(this, Modal);
+
+        var _this = _possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).call(this, props));
+
+        _this.state = { name: "" };
+        _this.handleTextChange = _this.handleTextChange.bind(_this);
+        return _this;
+    }
+
+    _createClass(Modal, [{
+        key: 'handleTextChange',
+        value: function handleTextChange(e) {
+            this.props.setUsername(e.target.value);
+            this.setState({ name: e.target.value });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            if (!this.props.show) {
+                return null;
+            }
+            var backdropStyle = {
+                position: 'fixed',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                backgroundColor: 'rgba(0,0,0,0.3)',
+                padding: 50
+            };
+            var modalStyle = {
+                backgroundColor: '#fff',
+                borderRadius: 5,
+                maxWidth: 500,
+                minHeight: 250,
+                margin: '0 auto',
+                padding: 30
+            };
+            var contentStyle = {
+                textAlign: "center"
+            };
+            var inputStyle = {
+                margin: "10px"
+            };
+            var buttonStyle = {
+                margin: "50px"
+            };
+            var hintStyle = {
+                color: "#808080"
+            };
+            return React.createElement(
+                'div',
+                { className: 'backdrop', style: backdropStyle },
+                React.createElement(
+                    'div',
+                    { className: 'modal', style: modalStyle },
+                    this.props.children,
+                    React.createElement(
+                        'div',
+                        { style: contentStyle },
+                        React.createElement(
+                            'h3',
+                            null,
+                            'What\'s your name?'
+                        ),
+                        React.createElement('input', { type: 'text',
+                            style: inputStyle,
+                            value: this.state.name,
+                            onChange: this.handleTextChange }),
+                        React.createElement(
+                            'h6',
+                            { style: hintStyle },
+                            'Hint: Your name cannot be empty.'
+                        ),
+                        React.createElement(
+                            'div',
+                            { className: 'footer', style: buttonStyle },
+                            React.createElement(
+                                'button',
+                                { onClick: this.props.onClose },
+                                'OK'
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Modal;
+}(React.Component);
+
+Modal.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    show: PropTypes.bool,
+    children: PropTypes.node
+};
+
+exports.default = Modal;
+
+},{"prop-types":410,"react":417}],425:[function(require,module,exports){
 'use strict';
 
 var _ChatRoom = require('./components/ChatRoom.js');
@@ -68129,7 +68193,7 @@ var PropTypes = require('prop-types');
 
 ReactDOM.render(React.createElement(_ChatRoom2.default, null), document.getElementById("root"));
 
-},{"./components/ChatRoom.js":421,"prop-types":410,"react":417,"react-dom":414}],424:[function(require,module,exports){
+},{"./components/ChatRoom.js":422,"prop-types":410,"react":417,"react-dom":414}],426:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68155,7 +68219,7 @@ function GetFirestore() {
   return db.collection(DBName);
 }
 
-},{"firebase":360,"firebase/firestore":359}],425:[function(require,module,exports){
+},{"firebase":360,"firebase/firestore":359}],427:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68188,7 +68252,7 @@ function DetatchListener() {
     unsubscribe();
 }
 
-},{"./firebase-config.js":424}],426:[function(require,module,exports){
+},{"./firebase-config.js":426}],428:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68199,4 +68263,4 @@ function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;
 }
 
-},{}]},{},[423]);
+},{}]},{},[425]);

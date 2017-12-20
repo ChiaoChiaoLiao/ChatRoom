@@ -1,5 +1,5 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Avatar from 'material-ui/Avatar';
 
@@ -11,20 +11,20 @@ class MessageItem extends React.Component {
     render() {
         var blockStyle = {
             margin: "10px"
-        }
+        };
         var inlineStyle = {
             display: "inline-block",
             verticalAlign: "middle"
-        }
+        };
         var textStyle = {
             margin: "0",
             marginLeft: "15px"
-        }
+        };
         var timeStyle = {
             margin: "0",
             marginLeft: "15px",
             color: "#808080"
-        }
+        };
         var timestamp = new Date(this.props.timestamp);
         var date = timestamp.getHours() + ":" + timestamp.getMinutes() + " "
                 + timestamp.getFullYear() + "/" + (timestamp.getMonth()+1) + "/" + timestamp.getDate();
@@ -56,7 +56,7 @@ class MessageList extends React.Component {
             overflow: "auto",
             height: "600px",
             width: "50%"
-        }
+        };
         return (
             <div style={scrollStyle}>
                 <ul>{displayItems}</ul>

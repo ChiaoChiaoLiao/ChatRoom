@@ -1,6 +1,6 @@
-const React = require('react');
-import {AddMessageToFirestore} from '../utils/firestore-utils.js';
-import {isEmptyOrSpaces} from '../utils/functions.js';
+import React from 'react';
+import {AddMessageToFirestore} from '../utils/firestore-utils';
+import {isEmptyOrSpaces} from '../utils/functions';
 
 class AddMessageForm extends React.Component {
     constructor(props) {

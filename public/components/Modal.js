@@ -1,17 +1,10 @@
-const React = require('react');
-const PropTypes = require('prop-types');
+import React from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 
 class Modal extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {name: ""};
-        this.handleTextChange = this.handleTextChange.bind(this);
-    }
-    handleTextChange(e) {
-        this.props.setUsername(e.target.value);
-        this.setState({name: e.target.value});
-    }
     render() {
+        const {onClose, show, children, username, handleTextChange} = this.props;
         if(!this.props.show) {
             return null;
         }
@@ -34,29 +27,29 @@ class Modal extends React.Component {
         };
         var contentStyle = {
             textAlign: "center"
-        }
+        };
         var inputStyle = {
             margin: "10px"
-        }
+        };
         var buttonStyle = {
             margin: "50px"
-        }
+        };
         var hintStyle = {
             color: "#808080"
-        }
+        };
         return (
             <div className="backdrop" style={backdropStyle}>
                 <div className="modal" style={modalStyle}>
-                    {this.props.children}
+                    {children}
                     <div style={contentStyle}>
                         <h3>What's your name?</h3>
                         <input type="text"
                            style={inputStyle}
-                           value={this.state.name}
-                           onChange={this.handleTextChange}/>
+                           value={username}
+                           onChange={handleTextChange}/>
                         <h6 style={hintStyle}>Hint: Your name cannot be empty.</h6>
                         <div className="footer" style={buttonStyle}>
-                            <button onClick={this.props.onClose}>
+                            <button onClick={onClose}>
                                 OK
                             </button>
                         </div>
@@ -70,7 +63,44 @@ class Modal extends React.Component {
 Modal.propTypes = {
     onClose: PropTypes.func.isRequired,
     show: PropTypes.bool,
-    children: PropTypes.node
+    children: PropTypes.node,
+    username: PropTypes.string,
+    handleTextChange: PropTypes.func
 };
 
-export default Modal;
+// Action
+export const changeTextAction = text => {
+    return {
+        type: "change_name",
+        value: text
+    };
+};
+
+// Reducer
+export function changeText(state = {username: ""}, action) {
+    const username = action.value;
+    switch (action.type) {
+        case "change_name":
+            console.log("reduce " + username);
+            return username;
+        default:
+            return state;
+    }
+}
+
+export function mapStateToProps(state) {
+    return {
+        username: state.value
+    }
+}
+
+export function mapDispatchToProps(dispatch) {
+    return {
+        handleTextChange: (e) => dispatch(changeTextAction(e.target.value))
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Modal);

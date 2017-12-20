@@ -1,9 +1,9 @@
-const React = require('react');
+import React from 'react';
 import Modal from './Modal.js';
-import MessageList from './MessageList.js';
-import AddMessageForm from './AddMessageForm.js';
-import {GetFirestore} from '../utils/firebase-config.js';
-import {isEmptyOrSpaces} from '../utils/functions.js';
+import MessageList from './MessageList';
+import AddMessageForm from './AddMessageForm';
+import {GetFirestore} from '../utils/firebase-config';
+import {isEmptyOrSpaces} from '../utils/functions';
 
 const FirestoreDB = GetFirestore();
 
@@ -50,14 +50,14 @@ class ChatRoom extends React.Component {
             return (
                 <div className="chatRoom">
                     <h1>Chatting Room</h1>
-                    <Modal show={this.state.isOpen} onClose={this.toggleModal} setUsername={this.getUsername}></Modal>
+                    <Modal show={this.state.isOpen} onClose={this.toggleModal} setUsername={this.getUsername}/>
                 </div>
             );
         }
         var lineStyle = {
             width: "50%",
             marginLeft: "0"
-        }
+        };
         return(
             <div className="chatRoom">
                 <h1>Chatting Room</h1>

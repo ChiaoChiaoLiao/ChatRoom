@@ -70343,8 +70343,8 @@ var Modal = function (_React$Component) {
                         _react2.default.createElement('input', { type: 'text',
                             style: inputStyle,
                             value: username,
-                            onChange: function onChange(event) {
-                                setUsername(event);
+                            onChange: function onChange(e) {
+                                handleTextChange(e);setUsername(e);
                             } }),
                         _react2.default.createElement(
                             'h6',

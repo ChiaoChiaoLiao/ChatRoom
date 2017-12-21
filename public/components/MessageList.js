@@ -4,10 +4,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Avatar from 'material-ui/Avatar';
 
 class MessageItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {messageText: ""};
-    }
     render() {
         var blockStyle = {
             margin: "10px"

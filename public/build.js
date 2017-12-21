@@ -69974,7 +69974,7 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Modal = require('./Modal.js');
+var _Modal = require('./Modal');
 
 var _Modal2 = _interopRequireDefault(_Modal);
 
@@ -70036,8 +70036,8 @@ var ChatRoom = function (_React$Component) {
         }
     }, {
         key: 'getUsername',
-        value: function getUsername(name) {
-            this.setState({ username: name });
+        value: function getUsername(e) {
+            this.setState({ username: e.target.value });
         }
     }, {
         key: 'toggleModal',
@@ -70097,7 +70097,7 @@ function ListenToFirestore(classThis) {
 
 exports.default = ChatRoom;
 
-},{"../utils/firebase-config":463,"../utils/functions":465,"./AddMessageForm":458,"./MessageList":460,"./Modal.js":461,"react":444}],460:[function(require,module,exports){
+},{"../utils/firebase-config":463,"../utils/functions":465,"./AddMessageForm":458,"./MessageList":460,"./Modal":461,"react":444}],460:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70133,13 +70133,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var MessageItem = function (_React$Component) {
     _inherits(MessageItem, _React$Component);
 
-    function MessageItem(props) {
+    function MessageItem() {
         _classCallCheck(this, MessageItem);
 
-        var _this = _possibleConstructorReturn(this, (MessageItem.__proto__ || Object.getPrototypeOf(MessageItem)).call(this, props));
-
-        _this.state = { messageText: "" };
-        return _this;
+        return _possibleConstructorReturn(this, (MessageItem.__proto__ || Object.getPrototypeOf(MessageItem)).apply(this, arguments));
     }
 
     _createClass(MessageItem, [{
@@ -70293,7 +70290,8 @@ var Modal = function (_React$Component) {
                 show = _props.show,
                 children = _props.children,
                 username = _props.username,
-                handleTextChange = _props.handleTextChange;
+                handleTextChange = _props.handleTextChange,
+                setUsername = _props.setUsername;
 
             if (!this.props.show) {
                 return null;
@@ -70345,7 +70343,9 @@ var Modal = function (_React$Component) {
                         _react2.default.createElement('input', { type: 'text',
                             style: inputStyle,
                             value: username,
-                            onChange: handleTextChange }),
+                            onChange: function onChange(event) {
+                                setUsername(event);
+                            } }),
                         _react2.default.createElement(
                             'h6',
                             { style: hintStyle },
@@ -70374,7 +70374,8 @@ Modal.propTypes = {
     show: _propTypes2.default.bool,
     children: _propTypes2.default.node,
     username: _propTypes2.default.string,
-    handleTextChange: _propTypes2.default.func
+    handleTextChange: _propTypes2.default.func,
+    setUsername: _propTypes2.default.func
 };
 
 // Action

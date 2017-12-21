@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from './Modal.js';
+import Modal from './Modal';
 import MessageList from './MessageList';
 import AddMessageForm from './AddMessageForm';
 import {GetFirestore} from '../utils/firebase-config';
@@ -32,8 +32,8 @@ class ChatRoom extends React.Component {
         });
         classThis.setState({messageItems: items});
     }
-    getUsername(name){
-        this.setState({username: name});
+    getUsername(e){
+        this.setState({username: e.target.value});
     }
     toggleModal() {
         console.log("toggle  " + this.state.username);

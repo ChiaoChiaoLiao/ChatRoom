@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 class Modal extends React.Component {
     render() {
-        const {onClose, show, children, username, handleTextChange} = this.props;
+        const {onClose, show, children, username, setUsername} = this.props;
         if(!this.props.show) {
             return null;
         }
@@ -46,7 +46,7 @@ class Modal extends React.Component {
                         <input type="text"
                            style={inputStyle}
                            value={username}
-                           onChange={handleTextChange}/>
+                           onChange={(event) => {setUsername(event)}}/>
                         <h6 style={hintStyle}>Hint: Your name cannot be empty.</h6>
                         <div className="footer" style={buttonStyle}>
                             <button onClick={onClose}>
@@ -65,7 +65,7 @@ Modal.propTypes = {
     show: PropTypes.bool,
     children: PropTypes.node,
     username: PropTypes.string,
-    handleTextChange: PropTypes.func
+    setUsername: PropTypes.func
 };
 
 // Action

@@ -82,7 +82,6 @@ export function changeText(state = {username: ""}, action) {
     const username = action.value;
     switch (action.type) {
         case "change_name":
-            console.log("reduce " + username);
             return username;
         default:
             return state;

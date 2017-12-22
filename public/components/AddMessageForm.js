@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {AddMessageToFirestore} from '../utils/firestore-utils';
 import {isEmptyOrSpaces} from '../utils/functions';
 
@@ -22,8 +23,9 @@ class AddMessageForm extends React.Component {
         }
     }
     handleAddMessageToFirestore() {
+        const {username} = this.props;
         if (!isEmptyOrSpaces(this.state.messageText)) {
-            AddMessageToFirestore(this.props.username, this.state.messageText);
+            AddMessageToFirestore(username, this.state.messageText);
             this.setState({messageText: ""});
         }
     }
@@ -40,5 +42,9 @@ class AddMessageForm extends React.Component {
         );
     }
 }
+
+AddMessageForm.propTypes = {
+    username: PropTypes.string
+};
 
 export default AddMessageForm;

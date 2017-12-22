@@ -69882,6 +69882,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _firestoreUtils = require('../utils/firestore-utils');
 
 var _functions = require('../utils/functions');
@@ -69927,8 +69931,10 @@ var AddMessageForm = function (_React$Component) {
     }, {
         key: 'handleAddMessageToFirestore',
         value: function handleAddMessageToFirestore() {
+            var username = this.props.username;
+
             if (!(0, _functions.isEmptyOrSpaces)(this.state.messageText)) {
-                (0, _firestoreUtils.AddMessageToFirestore)(this.props.username, this.state.messageText);
+                (0, _firestoreUtils.AddMessageToFirestore)(username, this.state.messageText);
                 this.setState({ messageText: "" });
             }
         }
@@ -69959,9 +69965,13 @@ var AddMessageForm = function (_React$Component) {
     return AddMessageForm;
 }(_react2.default.Component);
 
+AddMessageForm.propTypes = {
+    username: _propTypes2.default.string
+};
+
 exports.default = AddMessageForm;
 
-},{"../utils/firestore-utils":464,"../utils/functions":465,"react":444}],459:[function(require,module,exports){
+},{"../utils/firestore-utils":464,"../utils/functions":465,"prop-types":422,"react":444}],459:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70114,6 +70124,10 @@ var _reactDom = require('react-dom');
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _MuiThemeProvider = require('material-ui/styles/MuiThemeProvider');
 
 var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
@@ -70142,6 +70156,11 @@ var MessageItem = function (_React$Component) {
     _createClass(MessageItem, [{
         key: 'render',
         value: function render() {
+            var _props = this.props,
+                timestamp = _props.timestamp,
+                user = _props.user,
+                content = _props.content;
+
             var blockStyle = {
                 margin: "10px"
             };
@@ -70158,8 +70177,8 @@ var MessageItem = function (_React$Component) {
                 marginLeft: "15px",
                 color: "#808080"
             };
-            var timestamp = new Date(this.props.timestamp);
-            var date = timestamp.getHours() + ":" + timestamp.getMinutes() + " " + timestamp.getFullYear() + "/" + (timestamp.getMonth() + 1) + "/" + timestamp.getDate();
+            var timestampDate = new Date(timestamp);
+            var date = timestampDate.getHours() + ":" + timestampDate.getMinutes() + " " + timestampDate.getFullYear() + "/" + (timestampDate.getMonth() + 1) + "/" + timestampDate.getDate();
             return _react2.default.createElement(
                 'div',
                 { style: blockStyle },
@@ -70169,7 +70188,7 @@ var MessageItem = function (_React$Component) {
                     _react2.default.createElement(
                         _Avatar2.default,
                         null,
-                        this.props.user.substring(0, 2).toUpperCase()
+                        user.substring(0, 2).toUpperCase()
                     )
                 ),
                 _react2.default.createElement(
@@ -70178,12 +70197,12 @@ var MessageItem = function (_React$Component) {
                     _react2.default.createElement(
                         'h3',
                         { style: textStyle },
-                        this.props.user
+                        user
                     ),
                     _react2.default.createElement(
                         'h4',
                         { style: textStyle },
-                        this.props.content
+                        content
                     ),
                     _react2.default.createElement(
                         'h6',
@@ -70197,6 +70216,12 @@ var MessageItem = function (_React$Component) {
 
     return MessageItem;
 }(_react2.default.Component);
+
+MessageItem.propTypes = {
+    timestamp: _propTypes2.default.number,
+    user: _propTypes2.default.string,
+    content: _propTypes2.default.string
+};
 
 var MessageList = function (_React$Component2) {
     _inherits(MessageList, _React$Component2);
@@ -70216,7 +70241,9 @@ var MessageList = function (_React$Component2) {
     }, {
         key: 'render',
         value: function render() {
-            var displayItems = this.props.items.map(function (item) {
+            var items = this.props.items;
+
+            var displayItems = items.map(function (item) {
                 return _react2.default.createElement(MessageItem, { key: item.id, content: item.data, user: item.user, timestamp: item.timestamp });
             });
             var scrollStyle = {
@@ -70239,9 +70266,13 @@ var MessageList = function (_React$Component2) {
     return MessageList;
 }(_react2.default.Component);
 
+MessageList.propTypes = {
+    items: _propTypes2.default.array
+};
+
 exports.default = MessageList;
 
-},{"material-ui/Avatar":402,"material-ui/styles/MuiThemeProvider":403,"react":444,"react-dom":426}],461:[function(require,module,exports){
+},{"material-ui/Avatar":402,"material-ui/styles/MuiThemeProvider":403,"prop-types":422,"react":444,"react-dom":426}],461:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70394,7 +70425,6 @@ function changeText() {
     var username = action.value;
     switch (action.type) {
         case "change_name":
-            console.log("reduce " + username);
             return username;
         default:
             return state;
@@ -70432,15 +70462,19 @@ var _ChatRoom = require('./components/ChatRoom');
 
 var _ChatRoom2 = _interopRequireDefault(_ChatRoom);
 
+var _reactRedux = require('react-redux');
+
 var _redux = require('redux');
 
 var _Modal = require('./components/Modal');
 
-var _reactRedux = require('react-redux');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var store = (0, _redux.createStore)(_Modal.changeText);
+var rootReducer = (0, _redux.combineReducers)({
+    changeText: _Modal.changeText
+});
+
+var store = (0, _redux.createStore)(rootReducer);
 
 _reactDom2.default.render(_react2.default.createElement(
     _reactRedux.Provider,
@@ -70455,19 +70489,25 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.GetFirestore = GetFirestore;
-var Firebase = require("firebase");
-// Required for side-effects
-var Firestore = require("firebase/firestore");
+
+var _firebase = require("firebase");
+
+var _firebase2 = _interopRequireDefault(_firebase);
+
+var _firestore = require("firebase/firestore");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var DBName = "MessageBox";
 
-Firebase.initializeApp({
+_firebase2.default.initializeApp({
   apiKey: 'AIzaSyA570K65bcQZlUpiF_gULogZPhU108k7E0',
   authDomain: 'chatroom-582bf.firebaseapp.com',
   projectId: 'chatroom-582bf'
 });
 
 // Initialize Cloud Firestore through Firebase
-var db = Firebase.firestore();
+var db = _firebase2.default.firestore();
 
 function GetFirestore() {
   console.log("get firestore");

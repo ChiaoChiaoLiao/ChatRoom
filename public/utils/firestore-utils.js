@@ -9,7 +9,7 @@ export function AddMessageToFirestore(user, msg) {
         name: user,
         message: msg,
         timestamp: timestamp
-    }
+    };
     FirestoreDB.doc(timestamp + "_" + user)
         .set(newMessage)
         .then(function(docRef) {

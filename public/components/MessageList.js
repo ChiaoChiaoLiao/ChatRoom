@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Avatar from 'material-ui/Avatar';
 
 class MessageItem extends React.Component {
     render() {
+        const {timestamp, user, content} = this.props;
         var blockStyle = {
             margin: "10px"
         };
@@ -21,17 +23,17 @@ class MessageItem extends React.Component {
             marginLeft: "15px",
             color: "#808080"
         };
-        var timestamp = new Date(this.props.timestamp);
-        var date = timestamp.getHours() + ":" + timestamp.getMinutes() + " "
-                + timestamp.getFullYear() + "/" + (timestamp.getMonth()+1) + "/" + timestamp.getDate();
+        var timestampDate = new Date(timestamp);
+        var date = timestampDate.getHours() + ":" + timestampDate.getMinutes() + " "
+                + timestampDate.getFullYear() + "/" + (timestampDate.getMonth()+1) + "/" + timestampDate.getDate();
         return (
             <div style={blockStyle}>
                 <MuiThemeProvider style={inlineStyle}>
-                    <Avatar>{this.props.user.substring(0, 2).toUpperCase()}</Avatar>
+                    <Avatar>{user.substring(0, 2).toUpperCase()}</Avatar>
                 </MuiThemeProvider>
                 <div style={inlineStyle}>
-                    <h3 style={textStyle}>{this.props.user}</h3>
-                    <h4 style={textStyle}>{this.props.content}</h4>
+                    <h3 style={textStyle}>{user}</h3>
+                    <h4 style={textStyle}>{content}</h4>
                     <h6 style={timeStyle}>{date}</h6>
                 </div>
             </div>
@@ -39,13 +41,20 @@ class MessageItem extends React.Component {
     }
 }
 
+MessageItem.propTypes = {
+    timestamp: PropTypes.number,
+    user: PropTypes.string,
+    content: PropTypes.string
+};
+
 class MessageList extends React.Component {
     componentDidUpdate() {
         var node = ReactDOM.findDOMNode(this);
         node.scrollTop = node.scrollHeight;
     }
     render() {
-        var displayItems = this.props.items.map(function (item) {
+        const {items} = this.props;
+        var displayItems = items.map(function (item) {
             return (<MessageItem key={item.id} content={item.data} user={item.user} timestamp={item.timestamp}/>);
         });
         var scrollStyle = {
@@ -60,5 +69,9 @@ class MessageList extends React.Component {
         );
     }
 }
+
+MessageList.propTypes = {
+    items: PropTypes.array
+};
                                                 
 export default MessageList;

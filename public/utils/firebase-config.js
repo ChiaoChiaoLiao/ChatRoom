@@ -1,7 +1,6 @@
-const Firebase = require("firebase");
-// Required for side-effects
-const Firestore = require("firebase/firestore");
-const DBName = "MessageBox"
+import Firebase from "firebase";
+import {Firestore} from "firebase/firestore";
+const DBName = "MessageBox";
 
 Firebase.initializeApp({
   apiKey: 'AIzaSyA570K65bcQZlUpiF_gULogZPhU108k7E0',

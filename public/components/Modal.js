@@ -39,22 +39,18 @@ class Modal extends React.Component {
         };
         return (
             <div className="backdrop" style={backdropStyle}>
-                <div className="modal" style={modalStyle}>
-                    {children}
-                    <div style={contentStyle}>
-                        <h3>What's your name?</h3>
-                        <input type="text"
-                           style={inputStyle}
-                           value={username}
-                           onChange={(e) => {handleTextChange(e); setUsername(e);}}/>
-                        <h6 style={hintStyle}>Hint: Your name cannot be empty.</h6>
-                        <div className="footer" style={buttonStyle}>
-                            <button onClick={onClose}>
-                                OK
-                            </button>
-                        </div>
-                    </div>
+              <div className="modal" style={modalStyle}>
+                {children}
+                <div style={contentStyle}>
+                  <h3>What's your name?</h3>
+                  <input type="text" style={inputStyle} value={username}
+                         onChange={(e) => {handleTextChange(e); setUsername(e);}}/>
+                  <h6 style={hintStyle}>Hint: Your name cannot be empty.</h6>
+                  <div className="footer" style={buttonStyle}>
+                    <button onClick={onClose}>OK</button>
+                  </div>
                 </div>
+              </div>
             </div>
         );
     }

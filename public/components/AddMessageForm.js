@@ -12,9 +12,6 @@ class AddMessageForm extends React.Component {
         this.handleAddMessageToFirestore = this.handleAddMessageToFirestore.bind(this);
     }
     handleTextChange(e) {
-        if (event.key === 'Enter' && !isEmptyOrSpaces(e.target.value)) {
-            this.handleAddMessageToFirestore();
-        }
         this.setState({messageText: e.target.value});
     }
     handleKeyUp(e) {
@@ -32,12 +29,10 @@ class AddMessageForm extends React.Component {
     render() {
         return (
             <div>
-                <input type="text"
-                       value={this.state.messageText}
-                       onKeyUp={(e) => this.handleKeyUp(e)}
-                       onChange={this.handleTextChange}/>
-                <button
-                    onClick={this.handleAddMessageToFirestore}>Send</button>
+              <input type="text" value={this.state.messageText}
+                     onKeyUp={(e) => this.handleKeyUp(e)}
+                     onChange={this.handleTextChange}/>
+              <button onClick={this.handleAddMessageToFirestore}>Send</button>
             </div>
         );
     }

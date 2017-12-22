@@ -28,14 +28,14 @@ class MessageItem extends React.Component {
                 + timestampDate.getFullYear() + "/" + (timestampDate.getMonth()+1) + "/" + timestampDate.getDate();
         return (
             <div style={blockStyle}>
-                <MuiThemeProvider style={inlineStyle}>
-                    <Avatar>{user.substring(0, 2).toUpperCase()}</Avatar>
-                </MuiThemeProvider>
-                <div style={inlineStyle}>
-                    <h3 style={textStyle}>{user}</h3>
-                    <h4 style={textStyle}>{content}</h4>
-                    <h6 style={timeStyle}>{date}</h6>
-                </div>
+              <MuiThemeProvider style={inlineStyle}>
+                <Avatar>{user.substring(0, 2).toUpperCase()}</Avatar>
+              </MuiThemeProvider>
+              <div style={inlineStyle}>
+                <h3 style={textStyle}>{user}</h3>
+                <h4 style={textStyle}>{content}</h4>
+                <h6 style={timeStyle}>{date}</h6>
+              </div>
             </div>
         );
     }
@@ -64,7 +64,7 @@ class MessageList extends React.Component {
         };
         return (
             <div style={scrollStyle}>
-                <ul>{displayItems}</ul>
+              <ul>{displayItems}</ul>
             </div>
         );
     }

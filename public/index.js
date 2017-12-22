@@ -13,7 +13,7 @@ const  store = createStore(rootReducer);
 
 ReactDOM.render(
     <Provider store={store}>
-        <ChatRoom />
+      <ChatRoom />
     </Provider>,
     document.getElementById("root")
 );

@@ -69916,9 +69916,6 @@ var AddMessageForm = function (_React$Component) {
     _createClass(AddMessageForm, [{
         key: 'handleTextChange',
         value: function handleTextChange(e) {
-            if (event.key === 'Enter' && !(0, _functions.isEmptyOrSpaces)(e.target.value)) {
-                this.handleAddMessageToFirestore();
-            }
             this.setState({ messageText: e.target.value });
         }
     }, {
@@ -69946,16 +69943,14 @@ var AddMessageForm = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement('input', { type: 'text',
-                    value: this.state.messageText,
+                _react2.default.createElement('input', { type: 'text', value: this.state.messageText,
                     onKeyUp: function onKeyUp(e) {
                         return _this2.handleKeyUp(e);
                     },
                     onChange: this.handleTextChange }),
                 _react2.default.createElement(
                     'button',
-                    {
-                        onClick: this.handleAddMessageToFirestore },
+                    { onClick: this.handleAddMessageToFirestore },
                     'Send'
                 )
             );
@@ -70371,9 +70366,7 @@ var Modal = function (_React$Component) {
                             null,
                             'What\'s your name?'
                         ),
-                        _react2.default.createElement('input', { type: 'text',
-                            style: inputStyle,
-                            value: username,
+                        _react2.default.createElement('input', { type: 'text', style: inputStyle, value: username,
                             onChange: function onChange(e) {
                                 handleTextChange(e);setUsername(e);
                             } }),
@@ -70486,7 +70479,7 @@ _reactDom2.default.render(_react2.default.createElement(
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.GetFirestore = GetFirestore;
 
@@ -70501,17 +70494,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var DBName = "MessageBox";
 
 _firebase2.default.initializeApp({
-  apiKey: 'AIzaSyA570K65bcQZlUpiF_gULogZPhU108k7E0',
-  authDomain: 'chatroom-582bf.firebaseapp.com',
-  projectId: 'chatroom-582bf'
+    apiKey: 'AIzaSyA570K65bcQZlUpiF_gULogZPhU108k7E0',
+    authDomain: 'chatroom-582bf.firebaseapp.com',
+    projectId: 'chatroom-582bf'
 });
 
 // Initialize Cloud Firestore through Firebase
 var db = _firebase2.default.firestore();
 
 function GetFirestore() {
-  console.log("get firestore");
-  return db.collection(DBName);
+    console.log("get firestore");
+    return db.collection(DBName);
 }
 
 },{"firebase":360,"firebase/firestore":359}],464:[function(require,module,exports){

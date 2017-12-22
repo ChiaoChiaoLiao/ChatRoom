@@ -49,8 +49,8 @@ class ChatRoom extends React.Component {
         if (this.state.isOpen) {
             return (
                 <div className="chatRoom">
-                    <h1>Chatting Room</h1>
-                    <Modal show={this.state.isOpen} onClose={this.toggleModal} setUsername={this.getUsername}/>
+                  <h1>Chatting Room</h1>
+                  <Modal show={this.state.isOpen} onClose={this.toggleModal} setUsername={this.getUsername}/>
                 </div>
             );
         }
@@ -60,10 +60,10 @@ class ChatRoom extends React.Component {
         };
         return(
             <div className="chatRoom">
-                <h1>Chatting Room</h1>
-                <MessageList items={this.state.messageItems} id="messageList"/>
-                <hr style={lineStyle}/>
-                <AddMessageForm username={this.state.username}/>
+              <h1>Chatting Room</h1>
+              <MessageList items={this.state.messageItems} id="messageList"/>
+              <hr style={lineStyle}/>
+              <AddMessageForm username={this.state.username}/>
             </div>
         );
     }

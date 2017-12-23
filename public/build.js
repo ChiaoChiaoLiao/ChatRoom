@@ -16947,7 +16947,7 @@ exports.WebSocketConnection = WebSocketConnection;
 
 
 }).call(this,require('_process'))
-},{"../core/stats/StatsManager":47,"../core/storage/storage":51,"../core/util/util":63,"./Constants":82,"@firebase/app":1,"@firebase/util":215,"_process":405}],85:[function(require,module,exports){
+},{"../core/stats/StatsManager":47,"../core/storage/storage":51,"../core/util/util":63,"./Constants":82,"@firebase/app":1,"@firebase/util":215,"_process":417}],85:[function(require,module,exports){
 "use strict";
 /**
  * Copyright 2017 Google Inc.
@@ -35539,7 +35539,7 @@ if (typeof Promise === 'undefined') {
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"promise-polyfill":406}],180:[function(require,module,exports){
+},{"promise-polyfill":418}],180:[function(require,module,exports){
 /**
  * Copyright 2017 Google Inc.
  *
@@ -43621,7 +43621,7 @@ function hyphenateProperty(property) {
   return (0, _hyphenateStyleName2.default)(property);
 }
 module.exports = exports['default'];
-},{"hyphenate-style-name":363}],339:[function(require,module,exports){
+},{"hyphenate-style-name":364}],339:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -43711,7 +43711,7 @@ var EventListener = {
 
 module.exports = EventListener;
 }).call(this,require('_process'))
-},{"./emptyFunction":345,"_process":405}],341:[function(require,module,exports){
+},{"./emptyFunction":345,"_process":417}],341:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -43908,7 +43908,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = emptyObject;
 }).call(this,require('_process'))
-},{"_process":405}],347:[function(require,module,exports){
+},{"_process":417}],347:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -44094,7 +44094,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 }).call(this,require('_process'))
-},{"_process":405}],352:[function(require,module,exports){
+},{"_process":417}],352:[function(require,module,exports){
 'use strict';
 
 /**
@@ -44271,7 +44271,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 }).call(this,require('_process'))
-},{"./emptyFunction":345,"_process":405}],356:[function(require,module,exports){
+},{"./emptyFunction":345,"_process":417}],356:[function(require,module,exports){
 /**
  * Copyright 2017 Google Inc.
  *
@@ -44412,6 +44412,73 @@ require('@firebase/messaging');
 require('@firebase/storage');
 
 },{"@firebase/storage":182}],363:[function(require,module,exports){
+/**
+ * Copyright 2015, Yahoo! Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+'use strict';
+
+var REACT_STATICS = {
+    childContextTypes: true,
+    contextTypes: true,
+    defaultProps: true,
+    displayName: true,
+    getDefaultProps: true,
+    mixins: true,
+    propTypes: true,
+    type: true
+};
+
+var KNOWN_STATICS = {
+  name: true,
+  length: true,
+  prototype: true,
+  caller: true,
+  callee: true,
+  arguments: true,
+  arity: true
+};
+
+var defineProperty = Object.defineProperty;
+var getOwnPropertyNames = Object.getOwnPropertyNames;
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+var getPrototypeOf = Object.getPrototypeOf;
+var objectPrototype = getPrototypeOf && getPrototypeOf(Object);
+
+module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
+    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
+
+        if (objectPrototype) {
+            var inheritedComponent = getPrototypeOf(sourceComponent);
+            if (inheritedComponent && inheritedComponent !== objectPrototype) {
+                hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+            }
+        }
+
+        var keys = getOwnPropertyNames(sourceComponent);
+
+        if (getOwnPropertySymbols) {
+            keys = keys.concat(getOwnPropertySymbols(sourceComponent));
+        }
+
+        for (var i = 0; i < keys.length; ++i) {
+            var key = keys[i];
+            if (!REACT_STATICS[key] && !KNOWN_STATICS[key] && (!blacklist || !blacklist[key])) {
+                var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+                try { // Avoid failures from read-only properties
+                    defineProperty(targetComponent, key, descriptor);
+                } catch (e) {}
+            }
+        }
+
+        return targetComponent;
+    }
+
+    return targetComponent;
+};
+
+},{}],364:[function(require,module,exports){
 'use strict';
 
 var uppercasePattern = /[A-Z]/g;
@@ -44429,7 +44496,7 @@ function hyphenateStyleName(string) {
 
 module.exports = hyphenateStyleName;
 
-},{}],364:[function(require,module,exports){
+},{}],365:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44605,7 +44672,7 @@ function createPrefixer(_ref) {
   }();
 }
 module.exports = exports['default'];
-},{"../utils/addNewValuesOnly":380,"../utils/capitalizeString":381,"../utils/getBrowserInformation":382,"../utils/getPrefixedKeyframes":383,"../utils/isObject":385,"../utils/prefixValue":387}],365:[function(require,module,exports){
+},{"../utils/addNewValuesOnly":381,"../utils/capitalizeString":382,"../utils/getBrowserInformation":383,"../utils/getPrefixedKeyframes":384,"../utils/isObject":386,"../utils/prefixValue":388}],366:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44630,7 +44697,7 @@ function calc(property, value, style, _ref) {
   }
 }
 module.exports = exports['default'];
-},{"../../utils/getPrefixedValue":384}],366:[function(require,module,exports){
+},{"../../utils/getPrefixedValue":385}],367:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44659,7 +44726,7 @@ function flex(property, value, style, _ref) {
   }
 }
 module.exports = exports['default'];
-},{"../../utils/getPrefixedValue":384}],367:[function(require,module,exports){
+},{"../../utils/getPrefixedValue":385}],368:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44715,7 +44782,7 @@ function flexboxIE(property, value, style, _ref) {
   }
 }
 module.exports = exports['default'];
-},{"../../utils/getPrefixedValue":384}],368:[function(require,module,exports){
+},{"../../utils/getPrefixedValue":385}],369:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44784,7 +44851,7 @@ function flexboxOld(property, value, style, _ref) {
   }
 }
 module.exports = exports['default'];
-},{"../../utils/getPrefixedValue":384}],369:[function(require,module,exports){
+},{"../../utils/getPrefixedValue":385}],370:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44810,7 +44877,7 @@ function gradient(property, value, style, _ref) {
   }
 }
 module.exports = exports['default'];
-},{"../../utils/getPrefixedValue":384}],370:[function(require,module,exports){
+},{"../../utils/getPrefixedValue":385}],371:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44853,7 +44920,7 @@ var values = {
   }
 }
 module.exports = exports['default'];
-},{"../../utils/getPrefixedValue":384}],371:[function(require,module,exports){
+},{"../../utils/getPrefixedValue":385}],372:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44907,7 +44974,7 @@ function transition(property, value, style, _ref) {
   }
 }
 module.exports = exports['default'];
-},{"css-in-js-utils/lib/hyphenateProperty":338}],372:[function(require,module,exports){
+},{"css-in-js-utils/lib/hyphenateProperty":338}],373:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -44977,7 +45044,7 @@ function createPrefixer(_ref) {
   return prefixAll;
 }
 module.exports = exports['default'];
-},{"../utils/addNewValuesOnly":380,"../utils/isObject":385,"../utils/prefixProperty":386,"../utils/prefixValue":387}],373:[function(require,module,exports){
+},{"../utils/addNewValuesOnly":381,"../utils/isObject":386,"../utils/prefixProperty":387,"../utils/prefixValue":388}],374:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45000,7 +45067,7 @@ function calc(property, value) {
   }
 }
 module.exports = exports['default'];
-},{"css-in-js-utils/lib/isPrefixedValue":339}],374:[function(require,module,exports){
+},{"css-in-js-utils/lib/isPrefixedValue":339}],375:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45018,7 +45085,7 @@ function flex(property, value) {
   }
 }
 module.exports = exports['default'];
-},{}],375:[function(require,module,exports){
+},{}],376:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45048,7 +45115,7 @@ function flexboxIE(property, value, style) {
   }
 }
 module.exports = exports['default'];
-},{}],376:[function(require,module,exports){
+},{}],377:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45088,7 +45155,7 @@ function flexboxOld(property, value, style) {
   }
 }
 module.exports = exports['default'];
-},{}],377:[function(require,module,exports){
+},{}],378:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45114,7 +45181,7 @@ function gradient(property, value) {
   }
 }
 module.exports = exports['default'];
-},{"css-in-js-utils/lib/isPrefixedValue":339}],378:[function(require,module,exports){
+},{"css-in-js-utils/lib/isPrefixedValue":339}],379:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45148,7 +45215,7 @@ function sizing(property, value) {
   }
 }
 module.exports = exports['default'];
-},{}],379:[function(require,module,exports){
+},{}],380:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45242,7 +45309,7 @@ function transition(property, value, style, propertyPrefixMap) {
   }
 }
 module.exports = exports['default'];
-},{"../../utils/capitalizeString":381,"css-in-js-utils/lib/hyphenateProperty":338,"css-in-js-utils/lib/isPrefixedValue":339}],380:[function(require,module,exports){
+},{"../../utils/capitalizeString":382,"css-in-js-utils/lib/hyphenateProperty":338,"css-in-js-utils/lib/isPrefixedValue":339}],381:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45265,7 +45332,7 @@ function addNewValuesOnly(list, values) {
   }
 }
 module.exports = exports["default"];
-},{}],381:[function(require,module,exports){
+},{}],382:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45276,7 +45343,7 @@ function capitalizeString(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 module.exports = exports["default"];
-},{}],382:[function(require,module,exports){
+},{}],383:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45408,7 +45475,7 @@ function getBrowserInformation(userAgent) {
   return browserInfo;
 }
 module.exports = exports['default'];
-},{"bowser":250}],383:[function(require,module,exports){
+},{"bowser":250}],384:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45424,7 +45491,7 @@ function getPrefixedKeyframes(browserName, browserVersion, cssPrefix) {
   return prefixedKeyframes;
 }
 module.exports = exports['default'];
-},{}],384:[function(require,module,exports){
+},{}],385:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45438,7 +45505,7 @@ function getPrefixedValue(prefixedValue, value, keepUnprefixed) {
   return prefixedValue;
 }
 module.exports = exports["default"];
-},{}],385:[function(require,module,exports){
+},{}],386:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45449,7 +45516,7 @@ function isObject(value) {
   return value instanceof Object && !Array.isArray(value);
 }
 module.exports = exports["default"];
-},{}],386:[function(require,module,exports){
+},{}],387:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -45472,7 +45539,7 @@ function prefixProperty(prefixProperties, property, style) {
   }
 }
 module.exports = exports['default'];
-},{"./capitalizeString":381}],387:[function(require,module,exports){
+},{"./capitalizeString":382}],388:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -45491,7 +45558,62 @@ function prefixValue(plugins, property, value, style, metaData) {
   }
 }
 module.exports = exports["default"];
-},{}],388:[function(require,module,exports){
+},{}],389:[function(require,module,exports){
+(function (process){
+/**
+ * Copyright 2013-2015, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+'use strict';
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var invariant = function(condition, format, a, b, c, d, e, f) {
+  if (process.env.NODE_ENV !== 'production') {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  }
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error(
+        'Minified exception occurred; use the non-minified dev environment ' +
+        'for the full error message and additional helpful warnings.'
+      );
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(
+        format.replace(/%s/g, function() { return args[argIndex++]; })
+      );
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+};
+
+module.exports = invariant;
+
+}).call(this,require('_process'))
+},{"_process":417}],390:[function(require,module,exports){
 (function (global){
 /**
  * lodash (Custom Build) <https://lodash.com/>
@@ -47702,7 +47824,256 @@ function stubFalse() {
 module.exports = merge;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],389:[function(require,module,exports){
+},{}],391:[function(require,module,exports){
+var root = require('./_root');
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+module.exports = Symbol;
+
+},{"./_root":398}],392:[function(require,module,exports){
+var Symbol = require('./_Symbol'),
+    getRawTag = require('./_getRawTag'),
+    objectToString = require('./_objectToString');
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+},{"./_Symbol":391,"./_getRawTag":395,"./_objectToString":396}],393:[function(require,module,exports){
+(function (global){
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+module.exports = freeGlobal;
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],394:[function(require,module,exports){
+var overArg = require('./_overArg');
+
+/** Built-in value references. */
+var getPrototype = overArg(Object.getPrototypeOf, Object);
+
+module.exports = getPrototype;
+
+},{"./_overArg":397}],395:[function(require,module,exports){
+var Symbol = require('./_Symbol');
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+module.exports = getRawTag;
+
+},{"./_Symbol":391}],396:[function(require,module,exports){
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+module.exports = objectToString;
+
+},{}],397:[function(require,module,exports){
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+function overArg(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+
+module.exports = overArg;
+
+},{}],398:[function(require,module,exports){
+var freeGlobal = require('./_freeGlobal');
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+},{"./_freeGlobal":393}],399:[function(require,module,exports){
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+module.exports = isObjectLike;
+
+},{}],400:[function(require,module,exports){
+var baseGetTag = require('./_baseGetTag'),
+    getPrototype = require('./_getPrototype'),
+    isObjectLike = require('./isObjectLike');
+
+/** `Object#toString` result references. */
+var objectTag = '[object Object]';
+
+/** Used for built-in method references. */
+var funcProto = Function.prototype,
+    objectProto = Object.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/** Used to infer the `Object` constructor. */
+var objectCtorString = funcToString.call(Object);
+
+/**
+ * Checks if `value` is a plain object, that is, an object created by the
+ * `Object` constructor or one with a `[[Prototype]]` of `null`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.8.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ * }
+ *
+ * _.isPlainObject(new Foo);
+ * // => false
+ *
+ * _.isPlainObject([1, 2, 3]);
+ * // => false
+ *
+ * _.isPlainObject({ 'x': 0, 'y': 0 });
+ * // => true
+ *
+ * _.isPlainObject(Object.create(null));
+ * // => true
+ */
+function isPlainObject(value) {
+  if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
+    return false;
+  }
+  var proto = getPrototype(value);
+  if (proto === null) {
+    return true;
+  }
+  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
+    funcToString.call(Ctor) == objectCtorString;
+}
+
+module.exports = isPlainObject;
+
+},{"./_baseGetTag":392,"./_getPrototype":394,"./isObjectLike":399}],401:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -47875,7 +48246,7 @@ Avatar.propTypes = process.env.NODE_ENV !== "production" ? {
 } : {};
 exports.default = Avatar;
 }).call(this,require('_process'))
-},{"_process":405,"babel-runtime/core-js/object/get-prototype-of":237,"babel-runtime/helpers/classCallCheck":242,"babel-runtime/helpers/createClass":243,"babel-runtime/helpers/extends":244,"babel-runtime/helpers/inherits":245,"babel-runtime/helpers/objectWithoutProperties":246,"babel-runtime/helpers/possibleConstructorReturn":247,"prop-types":410,"react":417,"simple-assign":419}],390:[function(require,module,exports){
+},{"_process":417,"babel-runtime/core-js/object/get-prototype-of":237,"babel-runtime/helpers/classCallCheck":242,"babel-runtime/helpers/createClass":243,"babel-runtime/helpers/extends":244,"babel-runtime/helpers/inherits":245,"babel-runtime/helpers/objectWithoutProperties":246,"babel-runtime/helpers/possibleConstructorReturn":247,"prop-types":422,"react":444,"simple-assign":453}],402:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -47890,7 +48261,7 @@ var _Avatar2 = _interopRequireDefault(_Avatar);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = _Avatar2.default;
-},{"./Avatar":389}],391:[function(require,module,exports){
+},{"./Avatar":401}],403:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -47963,7 +48334,7 @@ MuiThemeProvider.propTypes = process.env.NODE_ENV !== "production" ? {
 } : {};
 exports.default = MuiThemeProvider;
 }).call(this,require('_process'))
-},{"./getMuiTheme":394,"_process":405,"babel-runtime/core-js/object/get-prototype-of":237,"babel-runtime/helpers/classCallCheck":242,"babel-runtime/helpers/createClass":243,"babel-runtime/helpers/inherits":245,"babel-runtime/helpers/possibleConstructorReturn":247,"prop-types":410,"react":417}],392:[function(require,module,exports){
+},{"./getMuiTheme":406,"_process":417,"babel-runtime/core-js/object/get-prototype-of":237,"babel-runtime/helpers/classCallCheck":242,"babel-runtime/helpers/createClass":243,"babel-runtime/helpers/inherits":245,"babel-runtime/helpers/possibleConstructorReturn":247,"prop-types":422,"react":444}],404:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48009,7 +48380,7 @@ exports.default = {
 }; /**
     * NB: If you update this file, please also update `docs/src/app/customization/Themes.js`
     */
-},{"../../utils/colorManipulator":402,"../colors":393,"../spacing":395}],393:[function(require,module,exports){
+},{"../../utils/colorManipulator":414,"../colors":405,"../spacing":407}],405:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48300,7 +48671,7 @@ var faintBlack = exports.faintBlack = 'rgba(0, 0, 0, 0.12)';
 var fullWhite = exports.fullWhite = 'rgba(255, 255, 255, 1)';
 var darkWhite = exports.darkWhite = 'rgba(255, 255, 255, 0.87)';
 var lightWhite = exports.lightWhite = 'rgba(255, 255, 255, 0.54)';
-},{}],394:[function(require,module,exports){
+},{}],406:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48683,7 +49054,7 @@ function getMuiTheme(muiTheme) {
 
   return muiTheme;
 }
-},{"../utils/autoprefixer":398,"../utils/callOnce":401,"../utils/colorManipulator":402,"../utils/rtl":403,"./baseThemes/lightBaseTheme":392,"./colors":393,"./typography":396,"./zIndex":397,"babel-runtime/helpers/toConsumableArray":248,"lodash.merge":388,"recompose/compose":418}],395:[function(require,module,exports){
+},{"../utils/autoprefixer":410,"../utils/callOnce":413,"../utils/colorManipulator":414,"../utils/rtl":415,"./baseThemes/lightBaseTheme":404,"./colors":405,"./typography":408,"./zIndex":409,"babel-runtime/helpers/toConsumableArray":248,"lodash.merge":390,"recompose/compose":445}],407:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48703,7 +49074,7 @@ exports.default = {
   desktopSubheaderHeight: 48,
   desktopToolbarHeight: 56
 };
-},{}],396:[function(require,module,exports){
+},{}],408:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48739,7 +49110,7 @@ var Typography = function Typography() {
 };
 
 exports.default = new Typography();
-},{"./colors":393,"babel-runtime/helpers/classCallCheck":242}],397:[function(require,module,exports){
+},{"./colors":405,"babel-runtime/helpers/classCallCheck":242}],409:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48757,7 +49128,7 @@ exports.default = {
   snackbar: 2900,
   tooltip: 3000
 };
-},{}],398:[function(require,module,exports){
+},{}],410:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -48839,7 +49210,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var hasWarnedAboutUserAgent = false;
 }).call(this,require('_process'))
-},{"./autoprefixerDynamic":399,"./autoprefixerStatic":400,"_process":405,"inline-style-prefixer/dynamic/createPrefixer":364,"inline-style-prefixer/static/createPrefixer":372,"warning":420}],399:[function(require,module,exports){
+},{"./autoprefixerDynamic":411,"./autoprefixerStatic":412,"_process":417,"inline-style-prefixer/dynamic/createPrefixer":365,"inline-style-prefixer/static/createPrefixer":373,"warning":457}],411:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48880,7 +49251,7 @@ exports.default = {
   plugins: [_calc2.default, _flex2.default, _flexboxIE2.default, _flexboxOld2.default, _gradient2.default, _sizing2.default, _transition2.default],
   prefixMap: { "chrome": { "transform": 35, "transformOrigin": 35, "transformOriginX": 35, "transformOriginY": 35, "backfaceVisibility": 35, "perspective": 35, "perspectiveOrigin": 35, "transformStyle": 35, "transformOriginZ": 35, "animation": 42, "animationDelay": 42, "animationDirection": 42, "animationFillMode": 42, "animationDuration": 42, "animationIterationCount": 42, "animationName": 42, "animationPlayState": 42, "animationTimingFunction": 42, "appearance": 60, "userSelect": 53, "fontKerning": 32, "textEmphasisPosition": 60, "textEmphasis": 60, "textEmphasisStyle": 60, "textEmphasisColor": 60, "boxDecorationBreak": 60, "clipPath": 54, "maskImage": 60, "maskMode": 60, "maskRepeat": 60, "maskPosition": 60, "maskClip": 60, "maskOrigin": 60, "maskSize": 60, "maskComposite": 60, "mask": 60, "maskBorderSource": 60, "maskBorderMode": 60, "maskBorderSlice": 60, "maskBorderWidth": 60, "maskBorderOutset": 60, "maskBorderRepeat": 60, "maskBorder": 60, "maskType": 60, "textDecorationStyle": 56, "textDecorationSkip": 56, "textDecorationLine": 56, "textDecorationColor": 56, "filter": 52, "fontFeatureSettings": 47, "breakAfter": 49, "breakBefore": 49, "breakInside": 49, "columnCount": 49, "columnFill": 49, "columnGap": 49, "columnRule": 49, "columnRuleColor": 49, "columnRuleStyle": 49, "columnRuleWidth": 49, "columns": 49, "columnSpan": 49, "columnWidth": 49 }, "safari": { "flex": 8, "flexBasis": 8, "flexDirection": 8, "flexGrow": 8, "flexFlow": 8, "flexShrink": 8, "flexWrap": 8, "alignContent": 8, "alignItems": 8, "alignSelf": 8, "justifyContent": 8, "order": 8, "transition": 6, "transitionDelay": 6, "transitionDuration": 6, "transitionProperty": 6, "transitionTimingFunction": 6, "transform": 8, "transformOrigin": 8, "transformOriginX": 8, "transformOriginY": 8, "backfaceVisibility": 8, "perspective": 8, "perspectiveOrigin": 8, "transformStyle": 8, "transformOriginZ": 8, "animation": 8, "animationDelay": 8, "animationDirection": 8, "animationFillMode": 8, "animationDuration": 8, "animationIterationCount": 8, "animationName": 8, "animationPlayState": 8, "animationTimingFunction": 8, "appearance": 10.1, "userSelect": 10.1, "backdropFilter": 10.1, "fontKerning": 9, "scrollSnapType": 10, "scrollSnapPointsX": 10, "scrollSnapPointsY": 10, "scrollSnapDestination": 10, "scrollSnapCoordinate": 10, "textEmphasisPosition": 7, "textEmphasis": 7, "textEmphasisStyle": 7, "textEmphasisColor": 7, "boxDecorationBreak": 10.1, "clipPath": 10.1, "maskImage": 10.1, "maskMode": 10.1, "maskRepeat": 10.1, "maskPosition": 10.1, "maskClip": 10.1, "maskOrigin": 10.1, "maskSize": 10.1, "maskComposite": 10.1, "mask": 10.1, "maskBorderSource": 10.1, "maskBorderMode": 10.1, "maskBorderSlice": 10.1, "maskBorderWidth": 10.1, "maskBorderOutset": 10.1, "maskBorderRepeat": 10.1, "maskBorder": 10.1, "maskType": 10.1, "textDecorationStyle": 10.1, "textDecorationSkip": 10.1, "textDecorationLine": 10.1, "textDecorationColor": 10.1, "shapeImageThreshold": 10, "shapeImageMargin": 10, "shapeImageOutside": 10, "filter": 9, "hyphens": 10.1, "flowInto": 10.1, "flowFrom": 10.1, "breakBefore": 8, "breakAfter": 8, "breakInside": 8, "regionFragment": 10.1, "columnCount": 8, "columnFill": 8, "columnGap": 8, "columnRule": 8, "columnRuleColor": 8, "columnRuleStyle": 8, "columnRuleWidth": 8, "columns": 8, "columnSpan": 8, "columnWidth": 8 }, "firefox": { "appearance": 55, "userSelect": 55, "boxSizing": 28, "textAlignLast": 48, "textDecorationStyle": 35, "textDecorationSkip": 35, "textDecorationLine": 35, "textDecorationColor": 35, "tabSize": 55, "hyphens": 42, "fontFeatureSettings": 33, "breakAfter": 51, "breakBefore": 51, "breakInside": 51, "columnCount": 51, "columnFill": 51, "columnGap": 51, "columnRule": 51, "columnRuleColor": 51, "columnRuleStyle": 51, "columnRuleWidth": 51, "columns": 51, "columnSpan": 51, "columnWidth": 51 }, "opera": { "flex": 16, "flexBasis": 16, "flexDirection": 16, "flexGrow": 16, "flexFlow": 16, "flexShrink": 16, "flexWrap": 16, "alignContent": 16, "alignItems": 16, "alignSelf": 16, "justifyContent": 16, "order": 16, "transform": 22, "transformOrigin": 22, "transformOriginX": 22, "transformOriginY": 22, "backfaceVisibility": 22, "perspective": 22, "perspectiveOrigin": 22, "transformStyle": 22, "transformOriginZ": 22, "animation": 29, "animationDelay": 29, "animationDirection": 29, "animationFillMode": 29, "animationDuration": 29, "animationIterationCount": 29, "animationName": 29, "animationPlayState": 29, "animationTimingFunction": 29, "appearance": 45, "userSelect": 40, "fontKerning": 19, "textEmphasisPosition": 45, "textEmphasis": 45, "textEmphasisStyle": 45, "textEmphasisColor": 45, "boxDecorationBreak": 45, "clipPath": 41, "maskImage": 45, "maskMode": 45, "maskRepeat": 45, "maskPosition": 45, "maskClip": 45, "maskOrigin": 45, "maskSize": 45, "maskComposite": 45, "mask": 45, "maskBorderSource": 45, "maskBorderMode": 45, "maskBorderSlice": 45, "maskBorderWidth": 45, "maskBorderOutset": 45, "maskBorderRepeat": 45, "maskBorder": 45, "maskType": 45, "textDecorationStyle": 43, "textDecorationSkip": 43, "textDecorationLine": 43, "textDecorationColor": 43, "filter": 39, "fontFeatureSettings": 34, "breakAfter": 36, "breakBefore": 36, "breakInside": 36, "columnCount": 36, "columnFill": 36, "columnGap": 36, "columnRule": 36, "columnRuleColor": 36, "columnRuleStyle": 36, "columnRuleWidth": 36, "columns": 36, "columnSpan": 36, "columnWidth": 36 }, "ie": { "flex": 10, "flexDirection": 10, "flexFlow": 10, "flexWrap": 10, "transform": 9, "transformOrigin": 9, "transformOriginX": 9, "transformOriginY": 9, "userSelect": 11, "wrapFlow": 11, "wrapThrough": 11, "wrapMargin": 11, "scrollSnapType": 11, "scrollSnapPointsX": 11, "scrollSnapPointsY": 11, "scrollSnapDestination": 11, "scrollSnapCoordinate": 11, "touchAction": 10, "hyphens": 11, "flowInto": 11, "flowFrom": 11, "breakBefore": 11, "breakAfter": 11, "breakInside": 11, "regionFragment": 11, "gridTemplateColumns": 11, "gridTemplateRows": 11, "gridTemplateAreas": 11, "gridTemplate": 11, "gridAutoColumns": 11, "gridAutoRows": 11, "gridAutoFlow": 11, "grid": 11, "gridRowStart": 11, "gridColumnStart": 11, "gridRowEnd": 11, "gridRow": 11, "gridColumn": 11, "gridColumnEnd": 11, "gridColumnGap": 11, "gridRowGap": 11, "gridArea": 11, "gridGap": 11, "textSizeAdjust": 11 }, "edge": { "userSelect": 15, "wrapFlow": 15, "wrapThrough": 15, "wrapMargin": 15, "scrollSnapType": 15, "scrollSnapPointsX": 15, "scrollSnapPointsY": 15, "scrollSnapDestination": 15, "scrollSnapCoordinate": 15, "hyphens": 15, "flowInto": 15, "flowFrom": 15, "breakBefore": 15, "breakAfter": 15, "breakInside": 15, "regionFragment": 15, "gridTemplateColumns": 15, "gridTemplateRows": 15, "gridTemplateAreas": 15, "gridTemplate": 15, "gridAutoColumns": 15, "gridAutoRows": 15, "gridAutoFlow": 15, "grid": 15, "gridRowStart": 15, "gridColumnStart": 15, "gridRowEnd": 15, "gridRow": 15, "gridColumn": 15, "gridColumnEnd": 15, "gridColumnGap": 15, "gridRowGap": 15, "gridArea": 15, "gridGap": 15 }, "ios_saf": { "flex": 8.1, "flexBasis": 8.1, "flexDirection": 8.1, "flexGrow": 8.1, "flexFlow": 8.1, "flexShrink": 8.1, "flexWrap": 8.1, "alignContent": 8.1, "alignItems": 8.1, "alignSelf": 8.1, "justifyContent": 8.1, "order": 8.1, "transition": 6, "transitionDelay": 6, "transitionDuration": 6, "transitionProperty": 6, "transitionTimingFunction": 6, "transform": 8.1, "transformOrigin": 8.1, "transformOriginX": 8.1, "transformOriginY": 8.1, "backfaceVisibility": 8.1, "perspective": 8.1, "perspectiveOrigin": 8.1, "transformStyle": 8.1, "transformOriginZ": 8.1, "animation": 8.1, "animationDelay": 8.1, "animationDirection": 8.1, "animationFillMode": 8.1, "animationDuration": 8.1, "animationIterationCount": 8.1, "animationName": 8.1, "animationPlayState": 8.1, "animationTimingFunction": 8.1, "appearance": 10, "userSelect": 10, "backdropFilter": 10, "fontKerning": 10, "scrollSnapType": 10, "scrollSnapPointsX": 10, "scrollSnapPointsY": 10, "scrollSnapDestination": 10, "scrollSnapCoordinate": 10, "boxDecorationBreak": 10, "clipPath": 10, "maskImage": 10, "maskMode": 10, "maskRepeat": 10, "maskPosition": 10, "maskClip": 10, "maskOrigin": 10, "maskSize": 10, "maskComposite": 10, "mask": 10, "maskBorderSource": 10, "maskBorderMode": 10, "maskBorderSlice": 10, "maskBorderWidth": 10, "maskBorderOutset": 10, "maskBorderRepeat": 10, "maskBorder": 10, "maskType": 10, "textSizeAdjust": 10, "textDecorationStyle": 10, "textDecorationSkip": 10, "textDecorationLine": 10, "textDecorationColor": 10, "shapeImageThreshold": 10, "shapeImageMargin": 10, "shapeImageOutside": 10, "filter": 9, "hyphens": 10, "flowInto": 10, "flowFrom": 10, "breakBefore": 8.1, "breakAfter": 8.1, "breakInside": 8.1, "regionFragment": 10, "columnCount": 8.1, "columnFill": 8.1, "columnGap": 8.1, "columnRule": 8.1, "columnRuleColor": 8.1, "columnRuleStyle": 8.1, "columnRuleWidth": 8.1, "columns": 8.1, "columnSpan": 8.1, "columnWidth": 8.1 }, "android": { "borderImage": 4.2, "borderImageOutset": 4.2, "borderImageRepeat": 4.2, "borderImageSlice": 4.2, "borderImageSource": 4.2, "borderImageWidth": 4.2, "flex": 4.2, "flexBasis": 4.2, "flexDirection": 4.2, "flexGrow": 4.2, "flexFlow": 4.2, "flexShrink": 4.2, "flexWrap": 4.2, "alignContent": 4.2, "alignItems": 4.2, "alignSelf": 4.2, "justifyContent": 4.2, "order": 4.2, "transition": 4.2, "transitionDelay": 4.2, "transitionDuration": 4.2, "transitionProperty": 4.2, "transitionTimingFunction": 4.2, "transform": 4.4, "transformOrigin": 4.4, "transformOriginX": 4.4, "transformOriginY": 4.4, "backfaceVisibility": 4.4, "perspective": 4.4, "perspectiveOrigin": 4.4, "transformStyle": 4.4, "transformOriginZ": 4.4, "animation": 4.4, "animationDelay": 4.4, "animationDirection": 4.4, "animationFillMode": 4.4, "animationDuration": 4.4, "animationIterationCount": 4.4, "animationName": 4.4, "animationPlayState": 4.4, "animationTimingFunction": 4.4, "appearance": 53, "userSelect": 53, "fontKerning": 4.4, "textEmphasisPosition": 53, "textEmphasis": 53, "textEmphasisStyle": 53, "textEmphasisColor": 53, "boxDecorationBreak": 53, "clipPath": 53, "maskImage": 53, "maskMode": 53, "maskRepeat": 53, "maskPosition": 53, "maskClip": 53, "maskOrigin": 53, "maskSize": 53, "maskComposite": 53, "mask": 53, "maskBorderSource": 53, "maskBorderMode": 53, "maskBorderSlice": 53, "maskBorderWidth": 53, "maskBorderOutset": 53, "maskBorderRepeat": 53, "maskBorder": 53, "maskType": 53, "filter": 4.4, "fontFeatureSettings": 4.4, "breakAfter": 53, "breakBefore": 53, "breakInside": 53, "columnCount": 53, "columnFill": 53, "columnGap": 53, "columnRule": 53, "columnRuleColor": 53, "columnRuleStyle": 53, "columnRuleWidth": 53, "columns": 53, "columnSpan": 53, "columnWidth": 53 }, "and_chr": { "appearance": 56, "textEmphasisPosition": 56, "textEmphasis": 56, "textEmphasisStyle": 56, "textEmphasisColor": 56, "boxDecorationBreak": 56, "maskImage": 56, "maskMode": 56, "maskRepeat": 56, "maskPosition": 56, "maskClip": 56, "maskOrigin": 56, "maskSize": 56, "maskComposite": 56, "mask": 56, "maskBorderSource": 56, "maskBorderMode": 56, "maskBorderSlice": 56, "maskBorderWidth": 56, "maskBorderOutset": 56, "maskBorderRepeat": 56, "maskBorder": 56, "maskType": 56, "textDecorationStyle": 56, "textDecorationSkip": 56, "textDecorationLine": 56, "textDecorationColor": 56 }, "and_uc": { "flex": 11, "flexBasis": 11, "flexDirection": 11, "flexGrow": 11, "flexFlow": 11, "flexShrink": 11, "flexWrap": 11, "alignContent": 11, "alignItems": 11, "alignSelf": 11, "justifyContent": 11, "order": 11, "transition": 11, "transitionDelay": 11, "transitionDuration": 11, "transitionProperty": 11, "transitionTimingFunction": 11, "transform": 11, "transformOrigin": 11, "transformOriginX": 11, "transformOriginY": 11, "backfaceVisibility": 11, "perspective": 11, "perspectiveOrigin": 11, "transformStyle": 11, "transformOriginZ": 11, "animation": 11, "animationDelay": 11, "animationDirection": 11, "animationFillMode": 11, "animationDuration": 11, "animationIterationCount": 11, "animationName": 11, "animationPlayState": 11, "animationTimingFunction": 11, "appearance": 11, "userSelect": 11, "fontKerning": 11, "textEmphasisPosition": 11, "textEmphasis": 11, "textEmphasisStyle": 11, "textEmphasisColor": 11, "maskImage": 11, "maskMode": 11, "maskRepeat": 11, "maskPosition": 11, "maskClip": 11, "maskOrigin": 11, "maskSize": 11, "maskComposite": 11, "mask": 11, "maskBorderSource": 11, "maskBorderMode": 11, "maskBorderSlice": 11, "maskBorderWidth": 11, "maskBorderOutset": 11, "maskBorderRepeat": 11, "maskBorder": 11, "maskType": 11, "textSizeAdjust": 11, "filter": 11, "hyphens": 11, "flowInto": 11, "flowFrom": 11, "breakBefore": 11, "breakAfter": 11, "breakInside": 11, "regionFragment": 11, "fontFeatureSettings": 11, "columnCount": 11, "columnFill": 11, "columnGap": 11, "columnRule": 11, "columnRuleColor": 11, "columnRuleStyle": 11, "columnRuleWidth": 11, "columns": 11, "columnSpan": 11, "columnWidth": 11 }, "op_mini": {} }
 }; /* eslint-disable */
-},{"inline-style-prefixer/dynamic/plugins/calc":365,"inline-style-prefixer/dynamic/plugins/flex":366,"inline-style-prefixer/dynamic/plugins/flexboxIE":367,"inline-style-prefixer/dynamic/plugins/flexboxOld":368,"inline-style-prefixer/dynamic/plugins/gradient":369,"inline-style-prefixer/dynamic/plugins/sizing":370,"inline-style-prefixer/dynamic/plugins/transition":371}],400:[function(require,module,exports){
+},{"inline-style-prefixer/dynamic/plugins/calc":366,"inline-style-prefixer/dynamic/plugins/flex":367,"inline-style-prefixer/dynamic/plugins/flexboxIE":368,"inline-style-prefixer/dynamic/plugins/flexboxOld":369,"inline-style-prefixer/dynamic/plugins/gradient":370,"inline-style-prefixer/dynamic/plugins/sizing":371,"inline-style-prefixer/dynamic/plugins/transition":372}],412:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48921,7 +49292,7 @@ exports.default = {
   plugins: [_calc2.default, _flex2.default, _flexboxIE2.default, _flexboxOld2.default, _gradient2.default, _sizing2.default, _transition2.default],
   prefixMap: { "transform": ["Webkit", "ms"], "transformOrigin": ["Webkit", "ms"], "transformOriginX": ["Webkit", "ms"], "transformOriginY": ["Webkit", "ms"], "backfaceVisibility": ["Webkit"], "perspective": ["Webkit"], "perspectiveOrigin": ["Webkit"], "transformStyle": ["Webkit"], "transformOriginZ": ["Webkit"], "animation": ["Webkit"], "animationDelay": ["Webkit"], "animationDirection": ["Webkit"], "animationFillMode": ["Webkit"], "animationDuration": ["Webkit"], "animationIterationCount": ["Webkit"], "animationName": ["Webkit"], "animationPlayState": ["Webkit"], "animationTimingFunction": ["Webkit"], "appearance": ["Webkit", "Moz"], "userSelect": ["Webkit", "Moz", "ms"], "fontKerning": ["Webkit"], "textEmphasisPosition": ["Webkit"], "textEmphasis": ["Webkit"], "textEmphasisStyle": ["Webkit"], "textEmphasisColor": ["Webkit"], "boxDecorationBreak": ["Webkit"], "clipPath": ["Webkit"], "maskImage": ["Webkit"], "maskMode": ["Webkit"], "maskRepeat": ["Webkit"], "maskPosition": ["Webkit"], "maskClip": ["Webkit"], "maskOrigin": ["Webkit"], "maskSize": ["Webkit"], "maskComposite": ["Webkit"], "mask": ["Webkit"], "maskBorderSource": ["Webkit"], "maskBorderMode": ["Webkit"], "maskBorderSlice": ["Webkit"], "maskBorderWidth": ["Webkit"], "maskBorderOutset": ["Webkit"], "maskBorderRepeat": ["Webkit"], "maskBorder": ["Webkit"], "maskType": ["Webkit"], "textDecorationStyle": ["Webkit", "Moz"], "textDecorationSkip": ["Webkit", "Moz"], "textDecorationLine": ["Webkit", "Moz"], "textDecorationColor": ["Webkit", "Moz"], "filter": ["Webkit"], "fontFeatureSettings": ["Webkit", "Moz"], "breakAfter": ["Webkit", "Moz", "ms"], "breakBefore": ["Webkit", "Moz", "ms"], "breakInside": ["Webkit", "Moz", "ms"], "columnCount": ["Webkit", "Moz"], "columnFill": ["Webkit", "Moz"], "columnGap": ["Webkit", "Moz"], "columnRule": ["Webkit", "Moz"], "columnRuleColor": ["Webkit", "Moz"], "columnRuleStyle": ["Webkit", "Moz"], "columnRuleWidth": ["Webkit", "Moz"], "columns": ["Webkit", "Moz"], "columnSpan": ["Webkit", "Moz"], "columnWidth": ["Webkit", "Moz"], "flex": ["Webkit", "ms"], "flexBasis": ["Webkit"], "flexDirection": ["Webkit", "ms"], "flexGrow": ["Webkit"], "flexFlow": ["Webkit", "ms"], "flexShrink": ["Webkit"], "flexWrap": ["Webkit", "ms"], "alignContent": ["Webkit"], "alignItems": ["Webkit"], "alignSelf": ["Webkit"], "justifyContent": ["Webkit"], "order": ["Webkit"], "transitionDelay": ["Webkit"], "transitionDuration": ["Webkit"], "transitionProperty": ["Webkit"], "transitionTimingFunction": ["Webkit"], "backdropFilter": ["Webkit"], "scrollSnapType": ["Webkit", "ms"], "scrollSnapPointsX": ["Webkit", "ms"], "scrollSnapPointsY": ["Webkit", "ms"], "scrollSnapDestination": ["Webkit", "ms"], "scrollSnapCoordinate": ["Webkit", "ms"], "shapeImageThreshold": ["Webkit"], "shapeImageMargin": ["Webkit"], "shapeImageOutside": ["Webkit"], "hyphens": ["Webkit", "Moz", "ms"], "flowInto": ["Webkit", "ms"], "flowFrom": ["Webkit", "ms"], "regionFragment": ["Webkit", "ms"], "boxSizing": ["Moz"], "textAlignLast": ["Moz"], "tabSize": ["Moz"], "wrapFlow": ["ms"], "wrapThrough": ["ms"], "wrapMargin": ["ms"], "touchAction": ["ms"], "gridTemplateColumns": ["ms"], "gridTemplateRows": ["ms"], "gridTemplateAreas": ["ms"], "gridTemplate": ["ms"], "gridAutoColumns": ["ms"], "gridAutoRows": ["ms"], "gridAutoFlow": ["ms"], "grid": ["ms"], "gridRowStart": ["ms"], "gridColumnStart": ["ms"], "gridRowEnd": ["ms"], "gridRow": ["ms"], "gridColumn": ["ms"], "gridColumnEnd": ["ms"], "gridColumnGap": ["ms"], "gridRowGap": ["ms"], "gridArea": ["ms"], "gridGap": ["ms"], "textSizeAdjust": ["Webkit", "ms"], "borderImage": ["Webkit"], "borderImageOutset": ["Webkit"], "borderImageRepeat": ["Webkit"], "borderImageSlice": ["Webkit"], "borderImageSource": ["Webkit"], "borderImageWidth": ["Webkit"] }
 }; /* eslint-disable */
-},{"inline-style-prefixer/static/plugins/calc":373,"inline-style-prefixer/static/plugins/flex":374,"inline-style-prefixer/static/plugins/flexboxIE":375,"inline-style-prefixer/static/plugins/flexboxOld":376,"inline-style-prefixer/static/plugins/gradient":377,"inline-style-prefixer/static/plugins/sizing":378,"inline-style-prefixer/static/plugins/transition":379}],401:[function(require,module,exports){
+},{"inline-style-prefixer/static/plugins/calc":374,"inline-style-prefixer/static/plugins/flex":375,"inline-style-prefixer/static/plugins/flexboxIE":376,"inline-style-prefixer/static/plugins/flexboxOld":377,"inline-style-prefixer/static/plugins/gradient":378,"inline-style-prefixer/static/plugins/sizing":379,"inline-style-prefixer/static/plugins/transition":380}],413:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -48950,7 +49321,7 @@ function callOnce() {
   }
 }
 }).call(this,require('_process'))
-},{"_process":405,"warning":420}],402:[function(require,module,exports){
+},{"_process":417,"warning":457}],414:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -49195,7 +49566,7 @@ function lighten(color, coefficient) {
   return convertColorToString(color);
 }
 }).call(this,require('_process'))
-},{"_process":405,"warning":420}],403:[function(require,module,exports){
+},{"_process":417,"warning":457}],415:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49293,7 +49664,7 @@ function rtl(muiTheme) {
     };
   }
 }
-},{"babel-runtime/core-js/object/keys":238}],404:[function(require,module,exports){
+},{"babel-runtime/core-js/object/keys":238}],416:[function(require,module,exports){
 /*
 object-assign
 (c) Sindre Sorhus
@@ -49385,7 +49756,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 	return to;
 };
 
-},{}],405:[function(require,module,exports){
+},{}],417:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -49571,7 +49942,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],406:[function(require,module,exports){
+},{}],418:[function(require,module,exports){
 (function (root) {
 
   // Store setTimeout reference so promise-polyfill will be unaffected by
@@ -49806,7 +50177,7 @@ process.umask = function() { return 0; };
 
 })(this);
 
-},{}],407:[function(require,module,exports){
+},{}],419:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -49869,7 +50240,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 module.exports = checkPropTypes;
 
 }).call(this,require('_process'))
-},{"./lib/ReactPropTypesSecret":411,"_process":405,"fbjs/lib/invariant":351,"fbjs/lib/warning":355}],408:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":423,"_process":417,"fbjs/lib/invariant":351,"fbjs/lib/warning":355}],420:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -49929,7 +50300,7 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
-},{"./lib/ReactPropTypesSecret":411,"fbjs/lib/emptyFunction":345,"fbjs/lib/invariant":351}],409:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":423,"fbjs/lib/emptyFunction":345,"fbjs/lib/invariant":351}],421:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -50475,7 +50846,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 };
 
 }).call(this,require('_process'))
-},{"./checkPropTypes":407,"./lib/ReactPropTypesSecret":411,"_process":405,"fbjs/lib/emptyFunction":345,"fbjs/lib/invariant":351,"fbjs/lib/warning":355,"object-assign":404}],410:[function(require,module,exports){
+},{"./checkPropTypes":419,"./lib/ReactPropTypesSecret":423,"_process":417,"fbjs/lib/emptyFunction":345,"fbjs/lib/invariant":351,"fbjs/lib/warning":355,"object-assign":416}],422:[function(require,module,exports){
 (function (process){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -50507,7 +50878,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./factoryWithThrowingShims":408,"./factoryWithTypeCheckers":409,"_process":405}],411:[function(require,module,exports){
+},{"./factoryWithThrowingShims":420,"./factoryWithTypeCheckers":421,"_process":417}],423:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -50521,7 +50892,7 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-},{}],412:[function(require,module,exports){
+},{}],424:[function(require,module,exports){
 (function (process){
 /** @license React v16.2.0
  * react-dom.development.js
@@ -65919,7 +66290,7 @@ module.exports = reactDom;
 }
 
 }).call(this,require('_process'))
-},{"_process":405,"fbjs/lib/EventListener":340,"fbjs/lib/ExecutionEnvironment":341,"fbjs/lib/camelizeStyleName":343,"fbjs/lib/containsNode":344,"fbjs/lib/emptyFunction":345,"fbjs/lib/emptyObject":346,"fbjs/lib/focusNode":347,"fbjs/lib/getActiveElement":348,"fbjs/lib/hyphenateStyleName":350,"fbjs/lib/invariant":351,"fbjs/lib/shallowEqual":354,"fbjs/lib/warning":355,"object-assign":404,"prop-types/checkPropTypes":407,"react":417}],413:[function(require,module,exports){
+},{"_process":417,"fbjs/lib/EventListener":340,"fbjs/lib/ExecutionEnvironment":341,"fbjs/lib/camelizeStyleName":343,"fbjs/lib/containsNode":344,"fbjs/lib/emptyFunction":345,"fbjs/lib/emptyObject":346,"fbjs/lib/focusNode":347,"fbjs/lib/getActiveElement":348,"fbjs/lib/hyphenateStyleName":350,"fbjs/lib/invariant":351,"fbjs/lib/shallowEqual":354,"fbjs/lib/warning":355,"object-assign":416,"prop-types/checkPropTypes":419,"react":444}],425:[function(require,module,exports){
 /** @license React v16.2.0
  * react-dom.production.min.js
  *
@@ -66150,7 +66521,7 @@ var Sg={createPortal:Qg,findDOMNode:function(a){if(null==a)return null;if(1===a.
 E("40");return a._reactRootContainer?(Z.unbatchedUpdates(function(){Pg(null,null,a,!1,function(){a._reactRootContainer=null})}),!0):!1},unstable_createPortal:Qg,unstable_batchedUpdates:tc,unstable_deferredUpdates:Z.deferredUpdates,flushSync:Z.flushSync,__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{EventPluginHub:mb,EventPluginRegistry:Va,EventPropagators:Cb,ReactControlledComponent:qc,ReactDOMComponentTree:sb,ReactDOMEventListener:xd}};
 Z.injectIntoDevTools({findFiberByHostInstance:pb,bundleType:0,version:"16.2.0",rendererPackageName:"react-dom"});var Tg=Object.freeze({default:Sg}),Ug=Tg&&Sg||Tg;module.exports=Ug["default"]?Ug["default"]:Ug;
 
-},{"fbjs/lib/EventListener":340,"fbjs/lib/ExecutionEnvironment":341,"fbjs/lib/containsNode":344,"fbjs/lib/emptyFunction":345,"fbjs/lib/emptyObject":346,"fbjs/lib/focusNode":347,"fbjs/lib/getActiveElement":348,"fbjs/lib/shallowEqual":354,"object-assign":404,"react":417}],414:[function(require,module,exports){
+},{"fbjs/lib/EventListener":340,"fbjs/lib/ExecutionEnvironment":341,"fbjs/lib/containsNode":344,"fbjs/lib/emptyFunction":345,"fbjs/lib/emptyObject":346,"fbjs/lib/focusNode":347,"fbjs/lib/getActiveElement":348,"fbjs/lib/shallowEqual":354,"object-assign":416,"react":444}],426:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -66192,7 +66563,1095 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react-dom.development.js":412,"./cjs/react-dom.production.min.js":413,"_process":405}],415:[function(require,module,exports){
+},{"./cjs/react-dom.development.js":424,"./cjs/react-dom.production.min.js":425,"_process":417}],427:[function(require,module,exports){
+(function (process){
+'use strict';
+
+exports.__esModule = true;
+exports.createProvider = createProvider;
+
+var _react = require('react');
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _PropTypes = require('../utils/PropTypes');
+
+var _warning = require('../utils/warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var didWarnAboutReceivingStore = false;
+function warnAboutReceivingStore() {
+  if (didWarnAboutReceivingStore) {
+    return;
+  }
+  didWarnAboutReceivingStore = true;
+
+  (0, _warning2.default)('<Provider> does not support changing `store` on the fly. ' + 'It is most likely that you see this error because you updated to ' + 'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' + 'automatically. See https://github.com/reactjs/react-redux/releases/' + 'tag/v2.0.0 for the migration instructions.');
+}
+
+function createProvider() {
+  var _Provider$childContex;
+
+  var storeKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'store';
+  var subKey = arguments[1];
+
+  var subscriptionKey = subKey || storeKey + 'Subscription';
+
+  var Provider = function (_Component) {
+    _inherits(Provider, _Component);
+
+    Provider.prototype.getChildContext = function getChildContext() {
+      var _ref;
+
+      return _ref = {}, _ref[storeKey] = this[storeKey], _ref[subscriptionKey] = null, _ref;
+    };
+
+    function Provider(props, context) {
+      _classCallCheck(this, Provider);
+
+      var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
+
+      _this[storeKey] = props.store;
+      return _this;
+    }
+
+    Provider.prototype.render = function render() {
+      return _react.Children.only(this.props.children);
+    };
+
+    return Provider;
+  }(_react.Component);
+
+  if (process.env.NODE_ENV !== 'production') {
+    Provider.prototype.componentWillReceiveProps = function (nextProps) {
+      if (this[storeKey] !== nextProps.store) {
+        warnAboutReceivingStore();
+      }
+    };
+  }
+
+  Provider.propTypes = {
+    store: _PropTypes.storeShape.isRequired,
+    children: _propTypes2.default.element.isRequired
+  };
+  Provider.childContextTypes = (_Provider$childContex = {}, _Provider$childContex[storeKey] = _PropTypes.storeShape.isRequired, _Provider$childContex[subscriptionKey] = _PropTypes.subscriptionShape, _Provider$childContex);
+
+  return Provider;
+}
+
+exports.default = createProvider();
+}).call(this,require('_process'))
+},{"../utils/PropTypes":437,"../utils/warning":441,"_process":417,"prop-types":422,"react":444}],428:[function(require,module,exports){
+(function (process){
+'use strict';
+
+exports.__esModule = true;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.default = connectAdvanced;
+
+var _hoistNonReactStatics = require('hoist-non-react-statics');
+
+var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
+
+var _invariant = require('invariant');
+
+var _invariant2 = _interopRequireDefault(_invariant);
+
+var _react = require('react');
+
+var _Subscription = require('../utils/Subscription');
+
+var _Subscription2 = _interopRequireDefault(_Subscription);
+
+var _PropTypes = require('../utils/PropTypes');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+var hotReloadingVersion = 0;
+var dummyState = {};
+function noop() {}
+function makeSelectorStateful(sourceSelector, store) {
+  // wrap the selector in an object that tracks its results between runs.
+  var selector = {
+    run: function runComponentSelector(props) {
+      try {
+        var nextProps = sourceSelector(store.getState(), props);
+        if (nextProps !== selector.props || selector.error) {
+          selector.shouldComponentUpdate = true;
+          selector.props = nextProps;
+          selector.error = null;
+        }
+      } catch (error) {
+        selector.shouldComponentUpdate = true;
+        selector.error = error;
+      }
+    }
+  };
+
+  return selector;
+}
+
+function connectAdvanced(
+/*
+  selectorFactory is a func that is responsible for returning the selector function used to
+  compute new props from state, props, and dispatch. For example:
+     export default connectAdvanced((dispatch, options) => (state, props) => ({
+      thing: state.things[props.thingId],
+      saveThing: fields => dispatch(actionCreators.saveThing(props.thingId, fields)),
+    }))(YourComponent)
+   Access to dispatch is provided to the factory so selectorFactories can bind actionCreators
+  outside of their selector as an optimization. Options passed to connectAdvanced are passed to
+  the selectorFactory, along with displayName and WrappedComponent, as the second argument.
+   Note that selectorFactory is responsible for all caching/memoization of inbound and outbound
+  props. Do not use connectAdvanced directly without memoizing results between calls to your
+  selector, otherwise the Connect component will re-render on every state or props change.
+*/
+selectorFactory) {
+  var _contextTypes, _childContextTypes;
+
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref$getDisplayName = _ref.getDisplayName,
+      getDisplayName = _ref$getDisplayName === undefined ? function (name) {
+    return 'ConnectAdvanced(' + name + ')';
+  } : _ref$getDisplayName,
+      _ref$methodName = _ref.methodName,
+      methodName = _ref$methodName === undefined ? 'connectAdvanced' : _ref$methodName,
+      _ref$renderCountProp = _ref.renderCountProp,
+      renderCountProp = _ref$renderCountProp === undefined ? undefined : _ref$renderCountProp,
+      _ref$shouldHandleStat = _ref.shouldHandleStateChanges,
+      shouldHandleStateChanges = _ref$shouldHandleStat === undefined ? true : _ref$shouldHandleStat,
+      _ref$storeKey = _ref.storeKey,
+      storeKey = _ref$storeKey === undefined ? 'store' : _ref$storeKey,
+      _ref$withRef = _ref.withRef,
+      withRef = _ref$withRef === undefined ? false : _ref$withRef,
+      connectOptions = _objectWithoutProperties(_ref, ['getDisplayName', 'methodName', 'renderCountProp', 'shouldHandleStateChanges', 'storeKey', 'withRef']);
+
+  var subscriptionKey = storeKey + 'Subscription';
+  var version = hotReloadingVersion++;
+
+  var contextTypes = (_contextTypes = {}, _contextTypes[storeKey] = _PropTypes.storeShape, _contextTypes[subscriptionKey] = _PropTypes.subscriptionShape, _contextTypes);
+  var childContextTypes = (_childContextTypes = {}, _childContextTypes[subscriptionKey] = _PropTypes.subscriptionShape, _childContextTypes);
+
+  return function wrapWithConnect(WrappedComponent) {
+    (0, _invariant2.default)(typeof WrappedComponent == 'function', 'You must pass a component to the function returned by ' + ('connect. Instead received ' + JSON.stringify(WrappedComponent)));
+
+    var wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+    var displayName = getDisplayName(wrappedComponentName);
+
+    var selectorFactoryOptions = _extends({}, connectOptions, {
+      getDisplayName: getDisplayName,
+      methodName: methodName,
+      renderCountProp: renderCountProp,
+      shouldHandleStateChanges: shouldHandleStateChanges,
+      storeKey: storeKey,
+      withRef: withRef,
+      displayName: displayName,
+      wrappedComponentName: wrappedComponentName,
+      WrappedComponent: WrappedComponent
+    });
+
+    var Connect = function (_Component) {
+      _inherits(Connect, _Component);
+
+      function Connect(props, context) {
+        _classCallCheck(this, Connect);
+
+        var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
+
+        _this.version = version;
+        _this.state = {};
+        _this.renderCount = 0;
+        _this.store = props[storeKey] || context[storeKey];
+        _this.propsMode = Boolean(props[storeKey]);
+        _this.setWrappedInstance = _this.setWrappedInstance.bind(_this);
+
+        (0, _invariant2.default)(_this.store, 'Could not find "' + storeKey + '" in either the context or props of ' + ('"' + displayName + '". Either wrap the root component in a <Provider>, ') + ('or explicitly pass "' + storeKey + '" as a prop to "' + displayName + '".'));
+
+        _this.initSelector();
+        _this.initSubscription();
+        return _this;
+      }
+
+      Connect.prototype.getChildContext = function getChildContext() {
+        var _ref2;
+
+        // If this component received store from props, its subscription should be transparent
+        // to any descendants receiving store+subscription from context; it passes along
+        // subscription passed to it. Otherwise, it shadows the parent subscription, which allows
+        // Connect to control ordering of notifications to flow top-down.
+        var subscription = this.propsMode ? null : this.subscription;
+        return _ref2 = {}, _ref2[subscriptionKey] = subscription || this.context[subscriptionKey], _ref2;
+      };
+
+      Connect.prototype.componentDidMount = function componentDidMount() {
+        if (!shouldHandleStateChanges) return;
+
+        // componentWillMount fires during server side rendering, but componentDidMount and
+        // componentWillUnmount do not. Because of this, trySubscribe happens during ...didMount.
+        // Otherwise, unsubscription would never take place during SSR, causing a memory leak.
+        // To handle the case where a child component may have triggered a state change by
+        // dispatching an action in its componentWillMount, we have to re-run the select and maybe
+        // re-render.
+        this.subscription.trySubscribe();
+        this.selector.run(this.props);
+        if (this.selector.shouldComponentUpdate) this.forceUpdate();
+      };
+
+      Connect.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+        this.selector.run(nextProps);
+      };
+
+      Connect.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
+        return this.selector.shouldComponentUpdate;
+      };
+
+      Connect.prototype.componentWillUnmount = function componentWillUnmount() {
+        if (this.subscription) this.subscription.tryUnsubscribe();
+        this.subscription = null;
+        this.notifyNestedSubs = noop;
+        this.store = null;
+        this.selector.run = noop;
+        this.selector.shouldComponentUpdate = false;
+      };
+
+      Connect.prototype.getWrappedInstance = function getWrappedInstance() {
+        (0, _invariant2.default)(withRef, 'To access the wrapped instance, you need to specify ' + ('{ withRef: true } in the options argument of the ' + methodName + '() call.'));
+        return this.wrappedInstance;
+      };
+
+      Connect.prototype.setWrappedInstance = function setWrappedInstance(ref) {
+        this.wrappedInstance = ref;
+      };
+
+      Connect.prototype.initSelector = function initSelector() {
+        var sourceSelector = selectorFactory(this.store.dispatch, selectorFactoryOptions);
+        this.selector = makeSelectorStateful(sourceSelector, this.store);
+        this.selector.run(this.props);
+      };
+
+      Connect.prototype.initSubscription = function initSubscription() {
+        if (!shouldHandleStateChanges) return;
+
+        // parentSub's source should match where store came from: props vs. context. A component
+        // connected to the store via props shouldn't use subscription from context, or vice versa.
+        var parentSub = (this.propsMode ? this.props : this.context)[subscriptionKey];
+        this.subscription = new _Subscription2.default(this.store, parentSub, this.onStateChange.bind(this));
+
+        // `notifyNestedSubs` is duplicated to handle the case where the component is  unmounted in
+        // the middle of the notification loop, where `this.subscription` will then be null. An
+        // extra null check every change can be avoided by copying the method onto `this` and then
+        // replacing it with a no-op on unmount. This can probably be avoided if Subscription's
+        // listeners logic is changed to not call listeners that have been unsubscribed in the
+        // middle of the notification loop.
+        this.notifyNestedSubs = this.subscription.notifyNestedSubs.bind(this.subscription);
+      };
+
+      Connect.prototype.onStateChange = function onStateChange() {
+        this.selector.run(this.props);
+
+        if (!this.selector.shouldComponentUpdate) {
+          this.notifyNestedSubs();
+        } else {
+          this.componentDidUpdate = this.notifyNestedSubsOnComponentDidUpdate;
+          this.setState(dummyState);
+        }
+      };
+
+      Connect.prototype.notifyNestedSubsOnComponentDidUpdate = function notifyNestedSubsOnComponentDidUpdate() {
+        // `componentDidUpdate` is conditionally implemented when `onStateChange` determines it
+        // needs to notify nested subs. Once called, it unimplements itself until further state
+        // changes occur. Doing it this way vs having a permanent `componentDidUpdate` that does
+        // a boolean check every time avoids an extra method call most of the time, resulting
+        // in some perf boost.
+        this.componentDidUpdate = undefined;
+        this.notifyNestedSubs();
+      };
+
+      Connect.prototype.isSubscribed = function isSubscribed() {
+        return Boolean(this.subscription) && this.subscription.isSubscribed();
+      };
+
+      Connect.prototype.addExtraProps = function addExtraProps(props) {
+        if (!withRef && !renderCountProp && !(this.propsMode && this.subscription)) return props;
+        // make a shallow copy so that fields added don't leak to the original selector.
+        // this is especially important for 'ref' since that's a reference back to the component
+        // instance. a singleton memoized selector would then be holding a reference to the
+        // instance, preventing the instance from being garbage collected, and that would be bad
+        var withExtras = _extends({}, props);
+        if (withRef) withExtras.ref = this.setWrappedInstance;
+        if (renderCountProp) withExtras[renderCountProp] = this.renderCount++;
+        if (this.propsMode && this.subscription) withExtras[subscriptionKey] = this.subscription;
+        return withExtras;
+      };
+
+      Connect.prototype.render = function render() {
+        var selector = this.selector;
+        selector.shouldComponentUpdate = false;
+
+        if (selector.error) {
+          throw selector.error;
+        } else {
+          return (0, _react.createElement)(WrappedComponent, this.addExtraProps(selector.props));
+        }
+      };
+
+      return Connect;
+    }(_react.Component);
+
+    Connect.WrappedComponent = WrappedComponent;
+    Connect.displayName = displayName;
+    Connect.childContextTypes = childContextTypes;
+    Connect.contextTypes = contextTypes;
+    Connect.propTypes = contextTypes;
+
+    if (process.env.NODE_ENV !== 'production') {
+      Connect.prototype.componentWillUpdate = function componentWillUpdate() {
+        var _this2 = this;
+
+        // We are hot reloading!
+        if (this.version !== version) {
+          this.version = version;
+          this.initSelector();
+
+          // If any connected descendants don't hot reload (and resubscribe in the process), their
+          // listeners will be lost when we unsubscribe. Unfortunately, by copying over all
+          // listeners, this does mean that the old versions of connected descendants will still be
+          // notified of state changes; however, their onStateChange function is a no-op so this
+          // isn't a huge deal.
+          var oldListeners = [];
+
+          if (this.subscription) {
+            oldListeners = this.subscription.listeners.get();
+            this.subscription.tryUnsubscribe();
+          }
+          this.initSubscription();
+          if (shouldHandleStateChanges) {
+            this.subscription.trySubscribe();
+            oldListeners.forEach(function (listener) {
+              return _this2.subscription.listeners.subscribe(listener);
+            });
+          }
+        }
+      };
+    }
+
+    return (0, _hoistNonReactStatics2.default)(Connect, WrappedComponent);
+  };
+}
+}).call(this,require('_process'))
+},{"../utils/PropTypes":437,"../utils/Subscription":438,"_process":417,"hoist-non-react-statics":363,"invariant":389,"react":444}],429:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.createConnect = createConnect;
+
+var _connectAdvanced = require('../components/connectAdvanced');
+
+var _connectAdvanced2 = _interopRequireDefault(_connectAdvanced);
+
+var _shallowEqual = require('../utils/shallowEqual');
+
+var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
+
+var _mapDispatchToProps = require('./mapDispatchToProps');
+
+var _mapDispatchToProps2 = _interopRequireDefault(_mapDispatchToProps);
+
+var _mapStateToProps = require('./mapStateToProps');
+
+var _mapStateToProps2 = _interopRequireDefault(_mapStateToProps);
+
+var _mergeProps = require('./mergeProps');
+
+var _mergeProps2 = _interopRequireDefault(_mergeProps);
+
+var _selectorFactory = require('./selectorFactory');
+
+var _selectorFactory2 = _interopRequireDefault(_selectorFactory);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+/*
+  connect is a facade over connectAdvanced. It turns its args into a compatible
+  selectorFactory, which has the signature:
+
+    (dispatch, options) => (nextState, nextOwnProps) => nextFinalProps
+  
+  connect passes its args to connectAdvanced as options, which will in turn pass them to
+  selectorFactory each time a Connect component instance is instantiated or hot reloaded.
+
+  selectorFactory returns a final props selector from its mapStateToProps,
+  mapStateToPropsFactories, mapDispatchToProps, mapDispatchToPropsFactories, mergeProps,
+  mergePropsFactories, and pure args.
+
+  The resulting final props selector is called by the Connect component instance whenever
+  it receives new props or store state.
+ */
+
+function match(arg, factories, name) {
+  for (var i = factories.length - 1; i >= 0; i--) {
+    var result = factories[i](arg);
+    if (result) return result;
+  }
+
+  return function (dispatch, options) {
+    throw new Error('Invalid value of type ' + typeof arg + ' for ' + name + ' argument when connecting component ' + options.wrappedComponentName + '.');
+  };
+}
+
+function strictEqual(a, b) {
+  return a === b;
+}
+
+// createConnect with default args builds the 'official' connect behavior. Calling it with
+// different options opens up some testing and extensibility scenarios
+function createConnect() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$connectHOC = _ref.connectHOC,
+      connectHOC = _ref$connectHOC === undefined ? _connectAdvanced2.default : _ref$connectHOC,
+      _ref$mapStateToPropsF = _ref.mapStateToPropsFactories,
+      mapStateToPropsFactories = _ref$mapStateToPropsF === undefined ? _mapStateToProps2.default : _ref$mapStateToPropsF,
+      _ref$mapDispatchToPro = _ref.mapDispatchToPropsFactories,
+      mapDispatchToPropsFactories = _ref$mapDispatchToPro === undefined ? _mapDispatchToProps2.default : _ref$mapDispatchToPro,
+      _ref$mergePropsFactor = _ref.mergePropsFactories,
+      mergePropsFactories = _ref$mergePropsFactor === undefined ? _mergeProps2.default : _ref$mergePropsFactor,
+      _ref$selectorFactory = _ref.selectorFactory,
+      selectorFactory = _ref$selectorFactory === undefined ? _selectorFactory2.default : _ref$selectorFactory;
+
+  return function connect(mapStateToProps, mapDispatchToProps, mergeProps) {
+    var _ref2 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
+        _ref2$pure = _ref2.pure,
+        pure = _ref2$pure === undefined ? true : _ref2$pure,
+        _ref2$areStatesEqual = _ref2.areStatesEqual,
+        areStatesEqual = _ref2$areStatesEqual === undefined ? strictEqual : _ref2$areStatesEqual,
+        _ref2$areOwnPropsEqua = _ref2.areOwnPropsEqual,
+        areOwnPropsEqual = _ref2$areOwnPropsEqua === undefined ? _shallowEqual2.default : _ref2$areOwnPropsEqua,
+        _ref2$areStatePropsEq = _ref2.areStatePropsEqual,
+        areStatePropsEqual = _ref2$areStatePropsEq === undefined ? _shallowEqual2.default : _ref2$areStatePropsEq,
+        _ref2$areMergedPropsE = _ref2.areMergedPropsEqual,
+        areMergedPropsEqual = _ref2$areMergedPropsE === undefined ? _shallowEqual2.default : _ref2$areMergedPropsE,
+        extraOptions = _objectWithoutProperties(_ref2, ['pure', 'areStatesEqual', 'areOwnPropsEqual', 'areStatePropsEqual', 'areMergedPropsEqual']);
+
+    var initMapStateToProps = match(mapStateToProps, mapStateToPropsFactories, 'mapStateToProps');
+    var initMapDispatchToProps = match(mapDispatchToProps, mapDispatchToPropsFactories, 'mapDispatchToProps');
+    var initMergeProps = match(mergeProps, mergePropsFactories, 'mergeProps');
+
+    return connectHOC(selectorFactory, _extends({
+      // used in error messages
+      methodName: 'connect',
+
+      // used to compute Connect's displayName from the wrapped component's displayName.
+      getDisplayName: function getDisplayName(name) {
+        return 'Connect(' + name + ')';
+      },
+
+      // if mapStateToProps is falsy, the Connect component doesn't subscribe to store state changes
+      shouldHandleStateChanges: Boolean(mapStateToProps),
+
+      // passed through to selectorFactory
+      initMapStateToProps: initMapStateToProps,
+      initMapDispatchToProps: initMapDispatchToProps,
+      initMergeProps: initMergeProps,
+      pure: pure,
+      areStatesEqual: areStatesEqual,
+      areOwnPropsEqual: areOwnPropsEqual,
+      areStatePropsEqual: areStatePropsEqual,
+      areMergedPropsEqual: areMergedPropsEqual
+
+    }, extraOptions));
+  };
+}
+
+exports.default = createConnect();
+},{"../components/connectAdvanced":428,"../utils/shallowEqual":439,"./mapDispatchToProps":430,"./mapStateToProps":431,"./mergeProps":432,"./selectorFactory":433}],430:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.whenMapDispatchToPropsIsFunction = whenMapDispatchToPropsIsFunction;
+exports.whenMapDispatchToPropsIsMissing = whenMapDispatchToPropsIsMissing;
+exports.whenMapDispatchToPropsIsObject = whenMapDispatchToPropsIsObject;
+
+var _redux = require('redux');
+
+var _wrapMapToProps = require('./wrapMapToProps');
+
+function whenMapDispatchToPropsIsFunction(mapDispatchToProps) {
+  return typeof mapDispatchToProps === 'function' ? (0, _wrapMapToProps.wrapMapToPropsFunc)(mapDispatchToProps, 'mapDispatchToProps') : undefined;
+}
+
+function whenMapDispatchToPropsIsMissing(mapDispatchToProps) {
+  return !mapDispatchToProps ? (0, _wrapMapToProps.wrapMapToPropsConstant)(function (dispatch) {
+    return { dispatch: dispatch };
+  }) : undefined;
+}
+
+function whenMapDispatchToPropsIsObject(mapDispatchToProps) {
+  return mapDispatchToProps && typeof mapDispatchToProps === 'object' ? (0, _wrapMapToProps.wrapMapToPropsConstant)(function (dispatch) {
+    return (0, _redux.bindActionCreators)(mapDispatchToProps, dispatch);
+  }) : undefined;
+}
+
+exports.default = [whenMapDispatchToPropsIsFunction, whenMapDispatchToPropsIsMissing, whenMapDispatchToPropsIsObject];
+},{"./wrapMapToProps":435,"redux":451}],431:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.whenMapStateToPropsIsFunction = whenMapStateToPropsIsFunction;
+exports.whenMapStateToPropsIsMissing = whenMapStateToPropsIsMissing;
+
+var _wrapMapToProps = require('./wrapMapToProps');
+
+function whenMapStateToPropsIsFunction(mapStateToProps) {
+  return typeof mapStateToProps === 'function' ? (0, _wrapMapToProps.wrapMapToPropsFunc)(mapStateToProps, 'mapStateToProps') : undefined;
+}
+
+function whenMapStateToPropsIsMissing(mapStateToProps) {
+  return !mapStateToProps ? (0, _wrapMapToProps.wrapMapToPropsConstant)(function () {
+    return {};
+  }) : undefined;
+}
+
+exports.default = [whenMapStateToPropsIsFunction, whenMapStateToPropsIsMissing];
+},{"./wrapMapToProps":435}],432:[function(require,module,exports){
+(function (process){
+'use strict';
+
+exports.__esModule = true;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.defaultMergeProps = defaultMergeProps;
+exports.wrapMergePropsFunc = wrapMergePropsFunc;
+exports.whenMergePropsIsFunction = whenMergePropsIsFunction;
+exports.whenMergePropsIsOmitted = whenMergePropsIsOmitted;
+
+var _verifyPlainObject = require('../utils/verifyPlainObject');
+
+var _verifyPlainObject2 = _interopRequireDefault(_verifyPlainObject);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function defaultMergeProps(stateProps, dispatchProps, ownProps) {
+  return _extends({}, ownProps, stateProps, dispatchProps);
+}
+
+function wrapMergePropsFunc(mergeProps) {
+  return function initMergePropsProxy(dispatch, _ref) {
+    var displayName = _ref.displayName,
+        pure = _ref.pure,
+        areMergedPropsEqual = _ref.areMergedPropsEqual;
+
+    var hasRunOnce = false;
+    var mergedProps = void 0;
+
+    return function mergePropsProxy(stateProps, dispatchProps, ownProps) {
+      var nextMergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+
+      if (hasRunOnce) {
+        if (!pure || !areMergedPropsEqual(nextMergedProps, mergedProps)) mergedProps = nextMergedProps;
+      } else {
+        hasRunOnce = true;
+        mergedProps = nextMergedProps;
+
+        if (process.env.NODE_ENV !== 'production') (0, _verifyPlainObject2.default)(mergedProps, displayName, 'mergeProps');
+      }
+
+      return mergedProps;
+    };
+  };
+}
+
+function whenMergePropsIsFunction(mergeProps) {
+  return typeof mergeProps === 'function' ? wrapMergePropsFunc(mergeProps) : undefined;
+}
+
+function whenMergePropsIsOmitted(mergeProps) {
+  return !mergeProps ? function () {
+    return defaultMergeProps;
+  } : undefined;
+}
+
+exports.default = [whenMergePropsIsFunction, whenMergePropsIsOmitted];
+}).call(this,require('_process'))
+},{"../utils/verifyPlainObject":440,"_process":417}],433:[function(require,module,exports){
+(function (process){
+'use strict';
+
+exports.__esModule = true;
+exports.impureFinalPropsSelectorFactory = impureFinalPropsSelectorFactory;
+exports.pureFinalPropsSelectorFactory = pureFinalPropsSelectorFactory;
+exports.default = finalPropsSelectorFactory;
+
+var _verifySubselectors = require('./verifySubselectors');
+
+var _verifySubselectors2 = _interopRequireDefault(_verifySubselectors);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function impureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch) {
+  return function impureFinalPropsSelector(state, ownProps) {
+    return mergeProps(mapStateToProps(state, ownProps), mapDispatchToProps(dispatch, ownProps), ownProps);
+  };
+}
+
+function pureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, _ref) {
+  var areStatesEqual = _ref.areStatesEqual,
+      areOwnPropsEqual = _ref.areOwnPropsEqual,
+      areStatePropsEqual = _ref.areStatePropsEqual;
+
+  var hasRunAtLeastOnce = false;
+  var state = void 0;
+  var ownProps = void 0;
+  var stateProps = void 0;
+  var dispatchProps = void 0;
+  var mergedProps = void 0;
+
+  function handleFirstCall(firstState, firstOwnProps) {
+    state = firstState;
+    ownProps = firstOwnProps;
+    stateProps = mapStateToProps(state, ownProps);
+    dispatchProps = mapDispatchToProps(dispatch, ownProps);
+    mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+    hasRunAtLeastOnce = true;
+    return mergedProps;
+  }
+
+  function handleNewPropsAndNewState() {
+    stateProps = mapStateToProps(state, ownProps);
+
+    if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
+
+    mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+    return mergedProps;
+  }
+
+  function handleNewProps() {
+    if (mapStateToProps.dependsOnOwnProps) stateProps = mapStateToProps(state, ownProps);
+
+    if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
+
+    mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+    return mergedProps;
+  }
+
+  function handleNewState() {
+    var nextStateProps = mapStateToProps(state, ownProps);
+    var statePropsChanged = !areStatePropsEqual(nextStateProps, stateProps);
+    stateProps = nextStateProps;
+
+    if (statePropsChanged) mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+
+    return mergedProps;
+  }
+
+  function handleSubsequentCalls(nextState, nextOwnProps) {
+    var propsChanged = !areOwnPropsEqual(nextOwnProps, ownProps);
+    var stateChanged = !areStatesEqual(nextState, state);
+    state = nextState;
+    ownProps = nextOwnProps;
+
+    if (propsChanged && stateChanged) return handleNewPropsAndNewState();
+    if (propsChanged) return handleNewProps();
+    if (stateChanged) return handleNewState();
+    return mergedProps;
+  }
+
+  return function pureFinalPropsSelector(nextState, nextOwnProps) {
+    return hasRunAtLeastOnce ? handleSubsequentCalls(nextState, nextOwnProps) : handleFirstCall(nextState, nextOwnProps);
+  };
+}
+
+// TODO: Add more comments
+
+// If pure is true, the selector returned by selectorFactory will memoize its results,
+// allowing connectAdvanced's shouldComponentUpdate to return false if final
+// props have not changed. If false, the selector will always return a new
+// object and shouldComponentUpdate will always return true.
+
+function finalPropsSelectorFactory(dispatch, _ref2) {
+  var initMapStateToProps = _ref2.initMapStateToProps,
+      initMapDispatchToProps = _ref2.initMapDispatchToProps,
+      initMergeProps = _ref2.initMergeProps,
+      options = _objectWithoutProperties(_ref2, ['initMapStateToProps', 'initMapDispatchToProps', 'initMergeProps']);
+
+  var mapStateToProps = initMapStateToProps(dispatch, options);
+  var mapDispatchToProps = initMapDispatchToProps(dispatch, options);
+  var mergeProps = initMergeProps(dispatch, options);
+
+  if (process.env.NODE_ENV !== 'production') {
+    (0, _verifySubselectors2.default)(mapStateToProps, mapDispatchToProps, mergeProps, options.displayName);
+  }
+
+  var selectorFactory = options.pure ? pureFinalPropsSelectorFactory : impureFinalPropsSelectorFactory;
+
+  return selectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, options);
+}
+}).call(this,require('_process'))
+},{"./verifySubselectors":434,"_process":417}],434:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.default = verifySubselectors;
+
+var _warning = require('../utils/warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function verify(selector, methodName, displayName) {
+  if (!selector) {
+    throw new Error('Unexpected value for ' + methodName + ' in ' + displayName + '.');
+  } else if (methodName === 'mapStateToProps' || methodName === 'mapDispatchToProps') {
+    if (!selector.hasOwnProperty('dependsOnOwnProps')) {
+      (0, _warning2.default)('The selector for ' + methodName + ' of ' + displayName + ' did not specify a value for dependsOnOwnProps.');
+    }
+  }
+}
+
+function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, displayName) {
+  verify(mapStateToProps, 'mapStateToProps', displayName);
+  verify(mapDispatchToProps, 'mapDispatchToProps', displayName);
+  verify(mergeProps, 'mergeProps', displayName);
+}
+},{"../utils/warning":441}],435:[function(require,module,exports){
+(function (process){
+'use strict';
+
+exports.__esModule = true;
+exports.wrapMapToPropsConstant = wrapMapToPropsConstant;
+exports.getDependsOnOwnProps = getDependsOnOwnProps;
+exports.wrapMapToPropsFunc = wrapMapToPropsFunc;
+
+var _verifyPlainObject = require('../utils/verifyPlainObject');
+
+var _verifyPlainObject2 = _interopRequireDefault(_verifyPlainObject);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function wrapMapToPropsConstant(getConstant) {
+  return function initConstantSelector(dispatch, options) {
+    var constant = getConstant(dispatch, options);
+
+    function constantSelector() {
+      return constant;
+    }
+    constantSelector.dependsOnOwnProps = false;
+    return constantSelector;
+  };
+}
+
+// dependsOnOwnProps is used by createMapToPropsProxy to determine whether to pass props as args
+// to the mapToProps function being wrapped. It is also used by makePurePropsSelector to determine
+// whether mapToProps needs to be invoked when props have changed.
+// 
+// A length of one signals that mapToProps does not depend on props from the parent component.
+// A length of zero is assumed to mean mapToProps is getting args via arguments or ...args and
+// therefore not reporting its length accurately..
+function getDependsOnOwnProps(mapToProps) {
+  return mapToProps.dependsOnOwnProps !== null && mapToProps.dependsOnOwnProps !== undefined ? Boolean(mapToProps.dependsOnOwnProps) : mapToProps.length !== 1;
+}
+
+// Used by whenMapStateToPropsIsFunction and whenMapDispatchToPropsIsFunction,
+// this function wraps mapToProps in a proxy function which does several things:
+// 
+//  * Detects whether the mapToProps function being called depends on props, which
+//    is used by selectorFactory to decide if it should reinvoke on props changes.
+//    
+//  * On first call, handles mapToProps if returns another function, and treats that
+//    new function as the true mapToProps for subsequent calls.
+//    
+//  * On first call, verifies the first result is a plain object, in order to warn
+//    the developer that their mapToProps function is not returning a valid result.
+//    
+function wrapMapToPropsFunc(mapToProps, methodName) {
+  return function initProxySelector(dispatch, _ref) {
+    var displayName = _ref.displayName;
+
+    var proxy = function mapToPropsProxy(stateOrDispatch, ownProps) {
+      return proxy.dependsOnOwnProps ? proxy.mapToProps(stateOrDispatch, ownProps) : proxy.mapToProps(stateOrDispatch);
+    };
+
+    // allow detectFactoryAndVerify to get ownProps
+    proxy.dependsOnOwnProps = true;
+
+    proxy.mapToProps = function detectFactoryAndVerify(stateOrDispatch, ownProps) {
+      proxy.mapToProps = mapToProps;
+      proxy.dependsOnOwnProps = getDependsOnOwnProps(mapToProps);
+      var props = proxy(stateOrDispatch, ownProps);
+
+      if (typeof props === 'function') {
+        proxy.mapToProps = props;
+        proxy.dependsOnOwnProps = getDependsOnOwnProps(props);
+        props = proxy(stateOrDispatch, ownProps);
+      }
+
+      if (process.env.NODE_ENV !== 'production') (0, _verifyPlainObject2.default)(props, displayName, methodName);
+
+      return props;
+    };
+
+    return proxy;
+  };
+}
+}).call(this,require('_process'))
+},{"../utils/verifyPlainObject":440,"_process":417}],436:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.connect = exports.connectAdvanced = exports.createProvider = exports.Provider = undefined;
+
+var _Provider = require('./components/Provider');
+
+var _Provider2 = _interopRequireDefault(_Provider);
+
+var _connectAdvanced = require('./components/connectAdvanced');
+
+var _connectAdvanced2 = _interopRequireDefault(_connectAdvanced);
+
+var _connect = require('./connect/connect');
+
+var _connect2 = _interopRequireDefault(_connect);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.Provider = _Provider2.default;
+exports.createProvider = _Provider.createProvider;
+exports.connectAdvanced = _connectAdvanced2.default;
+exports.connect = _connect2.default;
+},{"./components/Provider":427,"./components/connectAdvanced":428,"./connect/connect":429}],437:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.storeShape = exports.subscriptionShape = undefined;
+
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var subscriptionShape = exports.subscriptionShape = _propTypes2.default.shape({
+  trySubscribe: _propTypes2.default.func.isRequired,
+  tryUnsubscribe: _propTypes2.default.func.isRequired,
+  notifyNestedSubs: _propTypes2.default.func.isRequired,
+  isSubscribed: _propTypes2.default.func.isRequired
+});
+
+var storeShape = exports.storeShape = _propTypes2.default.shape({
+  subscribe: _propTypes2.default.func.isRequired,
+  dispatch: _propTypes2.default.func.isRequired,
+  getState: _propTypes2.default.func.isRequired
+});
+},{"prop-types":422}],438:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// encapsulates the subscription logic for connecting a component to the redux store, as
+// well as nesting subscriptions of descendant components, so that we can ensure the
+// ancestor components re-render before descendants
+
+var CLEARED = null;
+var nullListeners = {
+  notify: function notify() {}
+};
+
+function createListenerCollection() {
+  // the current/next pattern is copied from redux's createStore code.
+  // TODO: refactor+expose that code to be reusable here?
+  var current = [];
+  var next = [];
+
+  return {
+    clear: function clear() {
+      next = CLEARED;
+      current = CLEARED;
+    },
+    notify: function notify() {
+      var listeners = current = next;
+      for (var i = 0; i < listeners.length; i++) {
+        listeners[i]();
+      }
+    },
+    get: function get() {
+      return next;
+    },
+    subscribe: function subscribe(listener) {
+      var isSubscribed = true;
+      if (next === current) next = current.slice();
+      next.push(listener);
+
+      return function unsubscribe() {
+        if (!isSubscribed || current === CLEARED) return;
+        isSubscribed = false;
+
+        if (next === current) next = current.slice();
+        next.splice(next.indexOf(listener), 1);
+      };
+    }
+  };
+}
+
+var Subscription = function () {
+  function Subscription(store, parentSub, onStateChange) {
+    _classCallCheck(this, Subscription);
+
+    this.store = store;
+    this.parentSub = parentSub;
+    this.onStateChange = onStateChange;
+    this.unsubscribe = null;
+    this.listeners = nullListeners;
+  }
+
+  Subscription.prototype.addNestedSub = function addNestedSub(listener) {
+    this.trySubscribe();
+    return this.listeners.subscribe(listener);
+  };
+
+  Subscription.prototype.notifyNestedSubs = function notifyNestedSubs() {
+    this.listeners.notify();
+  };
+
+  Subscription.prototype.isSubscribed = function isSubscribed() {
+    return Boolean(this.unsubscribe);
+  };
+
+  Subscription.prototype.trySubscribe = function trySubscribe() {
+    if (!this.unsubscribe) {
+      this.unsubscribe = this.parentSub ? this.parentSub.addNestedSub(this.onStateChange) : this.store.subscribe(this.onStateChange);
+
+      this.listeners = createListenerCollection();
+    }
+  };
+
+  Subscription.prototype.tryUnsubscribe = function tryUnsubscribe() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+      this.unsubscribe = null;
+      this.listeners.clear();
+      this.listeners = nullListeners;
+    }
+  };
+
+  return Subscription;
+}();
+
+exports.default = Subscription;
+},{}],439:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.default = shallowEqual;
+var hasOwn = Object.prototype.hasOwnProperty;
+
+function is(x, y) {
+  if (x === y) {
+    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+  } else {
+    return x !== x && y !== y;
+  }
+}
+
+function shallowEqual(objA, objB) {
+  if (is(objA, objB)) return true;
+
+  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+    return false;
+  }
+
+  var keysA = Object.keys(objA);
+  var keysB = Object.keys(objB);
+
+  if (keysA.length !== keysB.length) return false;
+
+  for (var i = 0; i < keysA.length; i++) {
+    if (!hasOwn.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+},{}],440:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.default = verifyPlainObject;
+
+var _isPlainObject = require('lodash/isPlainObject');
+
+var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+var _warning = require('./warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function verifyPlainObject(value, displayName, methodName) {
+  if (!(0, _isPlainObject2.default)(value)) {
+    (0, _warning2.default)(methodName + '() in ' + displayName + ' must return a plain object. Instead received ' + value + '.');
+  }
+}
+},{"./warning":441,"lodash/isPlainObject":400}],441:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.default = warning;
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+    /* eslint-disable no-empty */
+  } catch (e) {}
+  /* eslint-enable no-empty */
+}
+},{}],442:[function(require,module,exports){
 (function (process){
 /** @license React v16.2.0
  * react.development.js
@@ -67553,7 +69012,7 @@ module.exports = react;
 }
 
 }).call(this,require('_process'))
-},{"_process":405,"fbjs/lib/emptyFunction":345,"fbjs/lib/emptyObject":346,"fbjs/lib/invariant":351,"fbjs/lib/warning":355,"object-assign":404,"prop-types/checkPropTypes":407}],416:[function(require,module,exports){
+},{"_process":417,"fbjs/lib/emptyFunction":345,"fbjs/lib/emptyObject":346,"fbjs/lib/invariant":351,"fbjs/lib/warning":355,"object-assign":416,"prop-types/checkPropTypes":419}],443:[function(require,module,exports){
 /** @license React v16.2.0
  * react.production.min.js
  *
@@ -67576,7 +69035,7 @@ var U={Children:{map:function(a,b,e){if(null==a)return a;var c=[];T(a,c,null,b,e
 d=a.key,g=a.ref,k=a._owner;if(null!=b){void 0!==b.ref&&(g=b.ref,k=G.current);void 0!==b.key&&(d=""+b.key);if(a.type&&a.type.defaultProps)var f=a.type.defaultProps;for(h in b)H.call(b,h)&&!I.hasOwnProperty(h)&&(c[h]=void 0===b[h]&&void 0!==f?f[h]:b[h])}var h=arguments.length-2;if(1===h)c.children=e;else if(1<h){f=Array(h);for(var l=0;l<h;l++)f[l]=arguments[l+2];c.children=f}return{$$typeof:r,type:a.type,key:d,ref:g,props:c,_owner:k}},createFactory:function(a){var b=J.bind(null,a);b.type=a;return b},
 isValidElement:K,version:"16.2.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED:{ReactCurrentOwner:G,assign:m}},V=Object.freeze({default:U}),W=V&&U||V;module.exports=W["default"]?W["default"]:W;
 
-},{"fbjs/lib/emptyFunction":345,"fbjs/lib/emptyObject":346,"object-assign":404}],417:[function(require,module,exports){
+},{"fbjs/lib/emptyFunction":345,"fbjs/lib/emptyObject":346,"object-assign":416}],444:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -67587,7 +69046,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 }).call(this,require('_process'))
-},{"./cjs/react.development.js":415,"./cjs/react.production.min.js":416,"_process":405}],418:[function(require,module,exports){
+},{"./cjs/react.development.js":442,"./cjs/react.production.min.js":443,"_process":417}],445:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -67613,7 +69072,638 @@ function compose() {
     };
   });
 }
-},{}],419:[function(require,module,exports){
+},{}],446:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports['default'] = applyMiddleware;
+
+var _compose = require('./compose');
+
+var _compose2 = _interopRequireDefault(_compose);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * Creates a store enhancer that applies middleware to the dispatch method
+ * of the Redux store. This is handy for a variety of tasks, such as expressing
+ * asynchronous actions in a concise manner, or logging every action payload.
+ *
+ * See `redux-thunk` package as an example of the Redux middleware.
+ *
+ * Because middleware is potentially asynchronous, this should be the first
+ * store enhancer in the composition chain.
+ *
+ * Note that each middleware will be given the `dispatch` and `getState` functions
+ * as named arguments.
+ *
+ * @param {...Function} middlewares The middleware chain to be applied.
+ * @returns {Function} A store enhancer applying the middleware.
+ */
+function applyMiddleware() {
+  for (var _len = arguments.length, middlewares = Array(_len), _key = 0; _key < _len; _key++) {
+    middlewares[_key] = arguments[_key];
+  }
+
+  return function (createStore) {
+    return function (reducer, preloadedState, enhancer) {
+      var store = createStore(reducer, preloadedState, enhancer);
+      var _dispatch = store.dispatch;
+      var chain = [];
+
+      var middlewareAPI = {
+        getState: store.getState,
+        dispatch: function dispatch(action) {
+          return _dispatch(action);
+        }
+      };
+      chain = middlewares.map(function (middleware) {
+        return middleware(middlewareAPI);
+      });
+      _dispatch = _compose2['default'].apply(undefined, chain)(store.dispatch);
+
+      return _extends({}, store, {
+        dispatch: _dispatch
+      });
+    };
+  };
+}
+},{"./compose":449}],447:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports['default'] = bindActionCreators;
+function bindActionCreator(actionCreator, dispatch) {
+  return function () {
+    return dispatch(actionCreator.apply(undefined, arguments));
+  };
+}
+
+/**
+ * Turns an object whose values are action creators, into an object with the
+ * same keys, but with every function wrapped into a `dispatch` call so they
+ * may be invoked directly. This is just a convenience method, as you can call
+ * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
+ *
+ * For convenience, you can also pass a single function as the first argument,
+ * and get a function in return.
+ *
+ * @param {Function|Object} actionCreators An object whose values are action
+ * creator functions. One handy way to obtain it is to use ES6 `import * as`
+ * syntax. You may also pass a single function.
+ *
+ * @param {Function} dispatch The `dispatch` function available on your Redux
+ * store.
+ *
+ * @returns {Function|Object} The object mimicking the original object, but with
+ * every action creator wrapped into the `dispatch` call. If you passed a
+ * function as `actionCreators`, the return value will also be a single
+ * function.
+ */
+function bindActionCreators(actionCreators, dispatch) {
+  if (typeof actionCreators === 'function') {
+    return bindActionCreator(actionCreators, dispatch);
+  }
+
+  if (typeof actionCreators !== 'object' || actionCreators === null) {
+    throw new Error('bindActionCreators expected an object or a function, instead received ' + (actionCreators === null ? 'null' : typeof actionCreators) + '. ' + 'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?');
+  }
+
+  var keys = Object.keys(actionCreators);
+  var boundActionCreators = {};
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var actionCreator = actionCreators[key];
+    if (typeof actionCreator === 'function') {
+      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+    }
+  }
+  return boundActionCreators;
+}
+},{}],448:[function(require,module,exports){
+(function (process){
+'use strict';
+
+exports.__esModule = true;
+exports['default'] = combineReducers;
+
+var _createStore = require('./createStore');
+
+var _isPlainObject = require('lodash/isPlainObject');
+
+var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+var _warning = require('./utils/warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+function getUndefinedStateErrorMessage(key, action) {
+  var actionType = action && action.type;
+  var actionName = actionType && '"' + actionType.toString() + '"' || 'an action';
+
+  return 'Given action ' + actionName + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state. ' + 'If you want this reducer to hold no value, you can return null instead of undefined.';
+}
+
+function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+  var reducerKeys = Object.keys(reducers);
+  var argumentName = action && action.type === _createStore.ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
+
+  if (reducerKeys.length === 0) {
+    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+  }
+
+  if (!(0, _isPlainObject2['default'])(inputState)) {
+    return 'The ' + argumentName + ' has unexpected type of "' + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
+  }
+
+  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+    return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+  });
+
+  unexpectedKeys.forEach(function (key) {
+    unexpectedKeyCache[key] = true;
+  });
+
+  if (unexpectedKeys.length > 0) {
+    return 'Unexpected ' + (unexpectedKeys.length > 1 ? 'keys' : 'key') + ' ' + ('"' + unexpectedKeys.join('", "') + '" found in ' + argumentName + '. ') + 'Expected to find one of the known reducer keys instead: ' + ('"' + reducerKeys.join('", "') + '". Unexpected keys will be ignored.');
+  }
+}
+
+function assertReducerShape(reducers) {
+  Object.keys(reducers).forEach(function (key) {
+    var reducer = reducers[key];
+    var initialState = reducer(undefined, { type: _createStore.ActionTypes.INIT });
+
+    if (typeof initialState === 'undefined') {
+      throw new Error('Reducer "' + key + '" returned undefined during initialization. ' + 'If the state passed to the reducer is undefined, you must ' + 'explicitly return the initial state. The initial state may ' + 'not be undefined. If you don\'t want to set a value for this reducer, ' + 'you can use null instead of undefined.');
+    }
+
+    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
+    if (typeof reducer(undefined, { type: type }) === 'undefined') {
+      throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ('Don\'t try to handle ' + _createStore.ActionTypes.INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined, but can be null.');
+    }
+  });
+}
+
+/**
+ * Turns an object whose values are different reducer functions, into a single
+ * reducer function. It will call every child reducer, and gather their results
+ * into a single state object, whose keys correspond to the keys of the passed
+ * reducer functions.
+ *
+ * @param {Object} reducers An object whose values correspond to different
+ * reducer functions that need to be combined into one. One handy way to obtain
+ * it is to use ES6 `import * as reducers` syntax. The reducers may never return
+ * undefined for any action. Instead, they should return their initial state
+ * if the state passed to them was undefined, and the current state for any
+ * unrecognized action.
+ *
+ * @returns {Function} A reducer function that invokes every reducer inside the
+ * passed object, and builds a state object with the same shape.
+ */
+function combineReducers(reducers) {
+  var reducerKeys = Object.keys(reducers);
+  var finalReducers = {};
+  for (var i = 0; i < reducerKeys.length; i++) {
+    var key = reducerKeys[i];
+
+    if (process.env.NODE_ENV !== 'production') {
+      if (typeof reducers[key] === 'undefined') {
+        (0, _warning2['default'])('No reducer provided for key "' + key + '"');
+      }
+    }
+
+    if (typeof reducers[key] === 'function') {
+      finalReducers[key] = reducers[key];
+    }
+  }
+  var finalReducerKeys = Object.keys(finalReducers);
+
+  var unexpectedKeyCache = void 0;
+  if (process.env.NODE_ENV !== 'production') {
+    unexpectedKeyCache = {};
+  }
+
+  var shapeAssertionError = void 0;
+  try {
+    assertReducerShape(finalReducers);
+  } catch (e) {
+    shapeAssertionError = e;
+  }
+
+  return function combination() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    if (shapeAssertionError) {
+      throw shapeAssertionError;
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+      if (warningMessage) {
+        (0, _warning2['default'])(warningMessage);
+      }
+    }
+
+    var hasChanged = false;
+    var nextState = {};
+    for (var _i = 0; _i < finalReducerKeys.length; _i++) {
+      var _key = finalReducerKeys[_i];
+      var reducer = finalReducers[_key];
+      var previousStateForKey = state[_key];
+      var nextStateForKey = reducer(previousStateForKey, action);
+      if (typeof nextStateForKey === 'undefined') {
+        var errorMessage = getUndefinedStateErrorMessage(_key, action);
+        throw new Error(errorMessage);
+      }
+      nextState[_key] = nextStateForKey;
+      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+    }
+    return hasChanged ? nextState : state;
+  };
+}
+}).call(this,require('_process'))
+},{"./createStore":450,"./utils/warning":452,"_process":417,"lodash/isPlainObject":400}],449:[function(require,module,exports){
+"use strict";
+
+exports.__esModule = true;
+exports["default"] = compose;
+/**
+ * Composes single-argument functions from right to left. The rightmost
+ * function can take multiple arguments as it provides the signature for
+ * the resulting composite function.
+ *
+ * @param {...Function} funcs The functions to compose.
+ * @returns {Function} A function obtained by composing the argument functions
+ * from right to left. For example, compose(f, g, h) is identical to doing
+ * (...args) => f(g(h(...args))).
+ */
+
+function compose() {
+  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  if (funcs.length === 0) {
+    return function (arg) {
+      return arg;
+    };
+  }
+
+  if (funcs.length === 1) {
+    return funcs[0];
+  }
+
+  return funcs.reduce(function (a, b) {
+    return function () {
+      return a(b.apply(undefined, arguments));
+    };
+  });
+}
+},{}],450:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports.ActionTypes = undefined;
+exports['default'] = createStore;
+
+var _isPlainObject = require('lodash/isPlainObject');
+
+var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+var _symbolObservable = require('symbol-observable');
+
+var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/**
+ * These are private action types reserved by Redux.
+ * For any unknown actions, you must return the current state.
+ * If the current state is undefined, you must return the initial state.
+ * Do not reference these action types directly in your code.
+ */
+var ActionTypes = exports.ActionTypes = {
+  INIT: '@@redux/INIT'
+
+  /**
+   * Creates a Redux store that holds the state tree.
+   * The only way to change the data in the store is to call `dispatch()` on it.
+   *
+   * There should only be a single store in your app. To specify how different
+   * parts of the state tree respond to actions, you may combine several reducers
+   * into a single reducer function by using `combineReducers`.
+   *
+   * @param {Function} reducer A function that returns the next state tree, given
+   * the current state tree and the action to handle.
+   *
+   * @param {any} [preloadedState] The initial state. You may optionally specify it
+   * to hydrate the state from the server in universal apps, or to restore a
+   * previously serialized user session.
+   * If you use `combineReducers` to produce the root reducer function, this must be
+   * an object with the same shape as `combineReducers` keys.
+   *
+   * @param {Function} [enhancer] The store enhancer. You may optionally specify it
+   * to enhance the store with third-party capabilities such as middleware,
+   * time travel, persistence, etc. The only store enhancer that ships with Redux
+   * is `applyMiddleware()`.
+   *
+   * @returns {Store} A Redux store that lets you read the state, dispatch actions
+   * and subscribe to changes.
+   */
+};function createStore(reducer, preloadedState, enhancer) {
+  var _ref2;
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState;
+    preloadedState = undefined;
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.');
+    }
+
+    return enhancer(createStore)(reducer, preloadedState);
+  }
+
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.');
+  }
+
+  var currentReducer = reducer;
+  var currentState = preloadedState;
+  var currentListeners = [];
+  var nextListeners = currentListeners;
+  var isDispatching = false;
+
+  function ensureCanMutateNextListeners() {
+    if (nextListeners === currentListeners) {
+      nextListeners = currentListeners.slice();
+    }
+  }
+
+  /**
+   * Reads the state tree managed by the store.
+   *
+   * @returns {any} The current state tree of your application.
+   */
+  function getState() {
+    return currentState;
+  }
+
+  /**
+   * Adds a change listener. It will be called any time an action is dispatched,
+   * and some part of the state tree may potentially have changed. You may then
+   * call `getState()` to read the current state tree inside the callback.
+   *
+   * You may call `dispatch()` from a change listener, with the following
+   * caveats:
+   *
+   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+   * If you subscribe or unsubscribe while the listeners are being invoked, this
+   * will not have any effect on the `dispatch()` that is currently in progress.
+   * However, the next `dispatch()` call, whether nested or not, will use a more
+   * recent snapshot of the subscription list.
+   *
+   * 2. The listener should not expect to see all state changes, as the state
+   * might have been updated multiple times during a nested `dispatch()` before
+   * the listener is called. It is, however, guaranteed that all subscribers
+   * registered before the `dispatch()` started will be called with the latest
+   * state by the time it exits.
+   *
+   * @param {Function} listener A callback to be invoked on every dispatch.
+   * @returns {Function} A function to remove this change listener.
+   */
+  function subscribe(listener) {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected listener to be a function.');
+    }
+
+    var isSubscribed = true;
+
+    ensureCanMutateNextListeners();
+    nextListeners.push(listener);
+
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return;
+      }
+
+      isSubscribed = false;
+
+      ensureCanMutateNextListeners();
+      var index = nextListeners.indexOf(listener);
+      nextListeners.splice(index, 1);
+    };
+  }
+
+  /**
+   * Dispatches an action. It is the only way to trigger a state change.
+   *
+   * The `reducer` function, used to create the store, will be called with the
+   * current state tree and the given `action`. Its return value will
+   * be considered the **next** state of the tree, and the change listeners
+   * will be notified.
+   *
+   * The base implementation only supports plain object actions. If you want to
+   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+   * wrap your store creating function into the corresponding middleware. For
+   * example, see the documentation for the `redux-thunk` package. Even the
+   * middleware will eventually dispatch plain object actions using this method.
+   *
+   * @param {Object} action A plain object representing “what changed”. It is
+   * a good idea to keep actions serializable so you can record and replay user
+   * sessions, or use the time travelling `redux-devtools`. An action must have
+   * a `type` property which may not be `undefined`. It is a good idea to use
+   * string constants for action types.
+   *
+   * @returns {Object} For convenience, the same action object you dispatched.
+   *
+   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+   * return something else (for example, a Promise you can await).
+   */
+  function dispatch(action) {
+    if (!(0, _isPlainObject2['default'])(action)) {
+      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+    }
+
+    if (typeof action.type === 'undefined') {
+      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+    }
+
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.');
+    }
+
+    try {
+      isDispatching = true;
+      currentState = currentReducer(currentState, action);
+    } finally {
+      isDispatching = false;
+    }
+
+    var listeners = currentListeners = nextListeners;
+    for (var i = 0; i < listeners.length; i++) {
+      var listener = listeners[i];
+      listener();
+    }
+
+    return action;
+  }
+
+  /**
+   * Replaces the reducer currently used by the store to calculate the state.
+   *
+   * You might need this if your app implements code splitting and you want to
+   * load some of the reducers dynamically. You might also need this if you
+   * implement a hot reloading mechanism for Redux.
+   *
+   * @param {Function} nextReducer The reducer for the store to use instead.
+   * @returns {void}
+   */
+  function replaceReducer(nextReducer) {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.');
+    }
+
+    currentReducer = nextReducer;
+    dispatch({ type: ActionTypes.INIT });
+  }
+
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/tc39/proposal-observable
+   */
+  function observable() {
+    var _ref;
+
+    var outerSubscribe = subscribe;
+    return _ref = {
+      /**
+       * The minimal observable subscription method.
+       * @param {Object} observer Any object that can be used as an observer.
+       * The observer object should have a `next` method.
+       * @returns {subscription} An object with an `unsubscribe` method that can
+       * be used to unsubscribe the observable from the store, and prevent further
+       * emission of values from the observable.
+       */
+      subscribe: function subscribe(observer) {
+        if (typeof observer !== 'object') {
+          throw new TypeError('Expected the observer to be an object.');
+        }
+
+        function observeState() {
+          if (observer.next) {
+            observer.next(getState());
+          }
+        }
+
+        observeState();
+        var unsubscribe = outerSubscribe(observeState);
+        return { unsubscribe: unsubscribe };
+      }
+    }, _ref[_symbolObservable2['default']] = function () {
+      return this;
+    }, _ref;
+  }
+
+  // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
+  dispatch({ type: ActionTypes.INIT });
+
+  return _ref2 = {
+    dispatch: dispatch,
+    subscribe: subscribe,
+    getState: getState,
+    replaceReducer: replaceReducer
+  }, _ref2[_symbolObservable2['default']] = observable, _ref2;
+}
+},{"lodash/isPlainObject":400,"symbol-observable":454}],451:[function(require,module,exports){
+(function (process){
+'use strict';
+
+exports.__esModule = true;
+exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
+
+var _createStore = require('./createStore');
+
+var _createStore2 = _interopRequireDefault(_createStore);
+
+var _combineReducers = require('./combineReducers');
+
+var _combineReducers2 = _interopRequireDefault(_combineReducers);
+
+var _bindActionCreators = require('./bindActionCreators');
+
+var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
+
+var _applyMiddleware = require('./applyMiddleware');
+
+var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
+
+var _compose = require('./compose');
+
+var _compose2 = _interopRequireDefault(_compose);
+
+var _warning = require('./utils/warning');
+
+var _warning2 = _interopRequireDefault(_warning);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+/*
+* This is a dummy function to check if the function name has been altered by minification.
+* If the function has been minified and NODE_ENV !== 'production', warn the user.
+*/
+function isCrushed() {}
+
+if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  (0, _warning2['default'])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+}
+
+exports.createStore = _createStore2['default'];
+exports.combineReducers = _combineReducers2['default'];
+exports.bindActionCreators = _bindActionCreators2['default'];
+exports.applyMiddleware = _applyMiddleware2['default'];
+exports.compose = _compose2['default'];
+}).call(this,require('_process'))
+},{"./applyMiddleware":446,"./bindActionCreators":447,"./combineReducers":448,"./compose":449,"./createStore":450,"./utils/warning":452,"_process":417}],452:[function(require,module,exports){
+'use strict';
+
+exports.__esModule = true;
+exports['default'] = warning;
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+    /* eslint-disable no-empty */
+  } catch (e) {}
+  /* eslint-enable no-empty */
+}
+},{}],453:[function(require,module,exports){
 module.exports = function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];
@@ -67626,7 +69716,66 @@ module.exports = function (target) {
   return target;
 };
 
-},{}],420:[function(require,module,exports){
+},{}],454:[function(require,module,exports){
+module.exports = require('./lib/index');
+
+},{"./lib/index":455}],455:[function(require,module,exports){
+(function (global){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _ponyfill = require('./ponyfill.js');
+
+var _ponyfill2 = _interopRequireDefault(_ponyfill);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var root; /* global window */
+
+
+if (typeof self !== 'undefined') {
+  root = self;
+} else if (typeof window !== 'undefined') {
+  root = window;
+} else if (typeof global !== 'undefined') {
+  root = global;
+} else if (typeof module !== 'undefined') {
+  root = module;
+} else {
+  root = Function('return this')();
+}
+
+var result = (0, _ponyfill2['default'])(root);
+exports['default'] = result;
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./ponyfill.js":456}],456:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports['default'] = symbolObservablePonyfill;
+function symbolObservablePonyfill(root) {
+	var result;
+	var _Symbol = root.Symbol;
+
+	if (typeof _Symbol === 'function') {
+		if (_Symbol.observable) {
+			result = _Symbol.observable;
+		} else {
+			result = _Symbol('observable');
+			_Symbol.observable = result;
+		}
+	} else {
+		result = '@@observable';
+	}
+
+	return result;
+};
+},{}],457:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
@@ -67690,7 +69839,7 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"_process":405}],421:[function(require,module,exports){
+},{"_process":417}],458:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -67787,7 +69936,7 @@ AddMessageForm.propTypes = {
 
 exports.default = AddMessageForm;
 
-},{"../utils/firestore-utils":427,"../utils/functions":428,"prop-types":410,"react":417}],422:[function(require,module,exports){
+},{"../utils/firestore-utils":464,"../utils/functions":465,"prop-types":422,"react":444}],459:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -67804,6 +69953,10 @@ var _Modal = require('./Modal');
 
 var _Modal2 = _interopRequireDefault(_Modal);
 
+var _propTypes = require('prop-types');
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _MessageList = require('./MessageList');
 
 var _MessageList2 = _interopRequireDefault(_MessageList);
@@ -67811,6 +69964,8 @@ var _MessageList2 = _interopRequireDefault(_MessageList);
 var _AddMessageForm = require('./AddMessageForm');
 
 var _AddMessageForm2 = _interopRequireDefault(_AddMessageForm);
+
+var _reactRedux = require('react-redux');
 
 var _firebaseConfig = require('../utils/firebase-config');
 
@@ -67838,9 +69993,7 @@ var ChatRoom = function (_React$Component) {
         _this.toggleModal = _this.toggleModal.bind(_this);
         _this.getUsername = _this.getUsername.bind(_this);
         _this.state = {
-            messageItems: [],
-            isOpen: true,
-            username: ""
+            messageItems: []
         };
         return _this;
     }
@@ -67863,24 +70016,22 @@ var ChatRoom = function (_React$Component) {
     }, {
         key: 'getUsername',
         value: function getUsername(e) {
-            this.setState({ username: e.target.value });
+            this.props.dispatch({ type: 'CHANGE_NAME', value: e.target.value });
         }
     }, {
         key: 'toggleModal',
         value: function toggleModal() {
-            console.log("toggle  " + this.state.username);
-            if ((0, _functions.isEmptyOrSpaces)(this.state.username)) {
+            console.log("toggle  " + this.props.username);
+            if ((0, _functions.isEmptyOrSpaces)(this.props.username)) {
                 return;
             }
             ListenToFirestore(this);
-            this.setState({
-                isOpen: !this.state.isOpen
-            });
+            this.props.dispatch({ type: 'CLOSE' });
         }
     }, {
         key: 'render',
         value: function render() {
-            if (this.state.isOpen) {
+            if (this.props.isOpen) {
                 return _react2.default.createElement(
                     'div',
                     { className: 'chatRoom' },
@@ -67889,7 +70040,7 @@ var ChatRoom = function (_React$Component) {
                         null,
                         'Chatting Room'
                     ),
-                    _react2.default.createElement(_Modal2.default, { show: this.state.isOpen, onClose: this.toggleModal, setUsername: this.getUsername })
+                    _react2.default.createElement(_Modal2.default, { show: this.props.isOpen, onClose: this.toggleModal, setUsername: this.getUsername })
                 );
             }
             var lineStyle = {
@@ -67906,7 +70057,7 @@ var ChatRoom = function (_React$Component) {
                 ),
                 _react2.default.createElement(_MessageList2.default, { items: this.state.messageItems, id: 'messageList' }),
                 _react2.default.createElement('hr', { style: lineStyle }),
-                _react2.default.createElement(_AddMessageForm2.default, { username: this.state.username })
+                _react2.default.createElement(_AddMessageForm2.default, { username: this.props.username })
             );
         }
     }]);
@@ -67921,9 +70072,21 @@ function ListenToFirestore(classThis) {
     });
 }
 
-exports.default = ChatRoom;
+ChatRoom.propTypes = {
+    username: _propTypes2.default.string,
+    isOpen: _propTypes2.default.bool
+};
 
-},{"../utils/firebase-config":426,"../utils/functions":428,"./AddMessageForm":421,"./MessageList":423,"./Modal":424,"react":417}],423:[function(require,module,exports){
+function mapStateToProps(state) {
+    return {
+        username: state.username,
+        isOpen: state.isOpen
+    };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(ChatRoom);
+
+},{"../utils/firebase-config":463,"../utils/functions":465,"./AddMessageForm":458,"./MessageList":460,"./Modal":461,"prop-types":422,"react":444,"react-redux":436}],460:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68088,7 +70251,7 @@ MessageList.propTypes = {
 
 exports.default = MessageList;
 
-},{"material-ui/Avatar":390,"material-ui/styles/MuiThemeProvider":391,"prop-types":410,"react":417,"react-dom":414}],424:[function(require,module,exports){
+},{"material-ui/Avatar":402,"material-ui/styles/MuiThemeProvider":403,"prop-types":422,"react":444,"react-dom":426}],461:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -68216,7 +70379,7 @@ Modal.propTypes = {
 
 exports.default = Modal;
 
-},{"prop-types":410,"react":417}],425:[function(require,module,exports){
+},{"prop-types":422,"react":444}],462:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -68231,11 +70394,41 @@ var _ChatRoom = require('./components/ChatRoom');
 
 var _ChatRoom2 = _interopRequireDefault(_ChatRoom);
 
+var _reactRedux = require('react-redux');
+
+var _redux = require('redux');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom2.default.render(_react2.default.createElement(_ChatRoom2.default, null), document.getElementById("root"));
+function reducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { username: "", isOpen: true };
+    var action = arguments[1];
 
-},{"./components/ChatRoom":422,"react":417,"react-dom":414}],426:[function(require,module,exports){
+    switch (action.type) {
+        case 'CHANGE_NAME':
+            return {
+                username: action.value,
+                isOpen: state.isOpen
+            };
+        case 'CLOSE':
+            return {
+                username: state.username,
+                isOpen: false
+            };
+        default:
+            return state;
+    }
+}
+
+var store = (0, _redux.createStore)(reducer);
+
+_reactDom2.default.render(_react2.default.createElement(
+    _reactRedux.Provider,
+    { store: store },
+    _react2.default.createElement(_ChatRoom2.default, null)
+), document.getElementById("root"));
+
+},{"./components/ChatRoom":459,"react":444,"react-dom":426,"react-redux":436,"redux":451}],463:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68267,7 +70460,7 @@ function GetFirestore() {
     return db.collection(DBName);
 }
 
-},{"firebase":360,"firebase/firestore":359}],427:[function(require,module,exports){
+},{"firebase":360,"firebase/firestore":359}],464:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68300,7 +70493,7 @@ function DetatchListener() {
     unsubscribe();
 }
 
-},{"./firebase-config.js":426}],428:[function(require,module,exports){
+},{"./firebase-config.js":463}],465:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68311,4 +70504,4 @@ function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;
 }
 
-},{}]},{},[425]);
+},{}]},{},[462]);

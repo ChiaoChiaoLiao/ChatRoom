@@ -1,7 +1,9 @@
 import React from 'react';
 import Modal from './Modal';
+import PropTypes from 'prop-types';
 import MessageList from './MessageList';
 import AddMessageForm from './AddMessageForm';
+import {connect} from 'react-redux';
 import {GetFirestore} from '../utils/firebase-config';
 import {isEmptyOrSpaces} from '../utils/functions';
 
@@ -14,9 +16,7 @@ class ChatRoom extends React.Component {
         this.toggleModal = this.toggleModal.bind(this);
         this.getUsername = this.getUsername.bind(this);
         this.state = {
-            messageItems: [],
-            isOpen: true,
-            username: ""
+            messageItems: []
         }
     }
     handleAddMessageItem(classThis, snapshot, items) {
@@ -33,24 +33,22 @@ class ChatRoom extends React.Component {
         classThis.setState({messageItems: items});
     }
     getUsername(e){
-        this.setState({username: e.target.value});
+        this.props.dispatch({ type: 'CHANGE_NAME', value: e.target.value });
     }
     toggleModal() {
-        console.log("toggle  " + this.state.username);
-        if (isEmptyOrSpaces(this.state.username)) {
+        console.log("toggle  " + this.props.username);
+        if (isEmptyOrSpaces(this.props.username)) {
             return;
         }
         ListenToFirestore(this);
-        this.setState({
-            isOpen: !this.state.isOpen
-        });
+        this.props.dispatch({ type: 'CLOSE' });
     }
     render() {
-        if (this.state.isOpen) {
+        if (this.props.isOpen) {
             return (
                 <div className="chatRoom">
                   <h1>Chatting Room</h1>
-                  <Modal show={this.state.isOpen} onClose={this.toggleModal} setUsername={this.getUsername}/>
+                  <Modal show={this.props.isOpen} onClose={this.toggleModal} setUsername={this.getUsername}/>
                 </div>
             );
         }
@@ -63,7 +61,7 @@ class ChatRoom extends React.Component {
               <h1>Chatting Room</h1>
               <MessageList items={this.state.messageItems} id="messageList"/>
               <hr style={lineStyle}/>
-              <AddMessageForm username={this.state.username}/>
+              <AddMessageForm username={this.props.username}/>
             </div>
         );
     }
@@ -77,4 +75,16 @@ function ListenToFirestore(classThis) {
     });
 }
 
-export default ChatRoom;
+ChatRoom.propTypes = {
+    username: PropTypes.string,
+    isOpen: PropTypes.bool
+}
+
+function mapStateToProps(state) {
+    return {
+        username: state.username,
+        isOpen: state.isOpen
+    };
+}
+
+export default connect(mapStateToProps)(ChatRoom);

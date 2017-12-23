@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 
 class Modal extends React.Component {
     render() {
-        const {onClose, show, children, username, handleTextChange, setUsername} = this.props;
+        const {onClose, show, children, username, setUsername} = this.props;
         if(!this.props.show) {
             return null;
         }
@@ -44,7 +43,7 @@ class Modal extends React.Component {
                 <div style={contentStyle}>
                   <h3>What's your name?</h3>
                   <input type="text" style={inputStyle} value={username}
-                         onChange={(e) => {handleTextChange(e); setUsername(e);}}/>
+                         onChange={(e) => setUsername(e)}/>
                   <h6 style={hintStyle}>Hint: Your name cannot be empty.</h6>
                   <div className="footer" style={buttonStyle}>
                     <button onClick={onClose}>OK</button>
@@ -61,42 +60,7 @@ Modal.propTypes = {
     show: PropTypes.bool,
     children: PropTypes.node,
     username: PropTypes.string,
-    handleTextChange: PropTypes.func,
     setUsername: PropTypes.func
 };
 
-// Action
-export const changeTextAction = text => {
-    return {
-        type: "change_name",
-        value: text
-    };
-};
-
-// Reducer
-export function changeText(state = {username: ""}, action) {
-    const username = action.value;
-    switch (action.type) {
-        case "change_name":
-            return username;
-        default:
-            return state;
-    }
-}
-
-export function mapStateToProps(state) {
-    return {
-        username: state.value
-    }
-}
-
-export function mapDispatchToProps(dispatch) {
-    return {
-        handleTextChange: (e) => dispatch(changeTextAction(e.target.value))
-    }
-}
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Modal);
+export default Modal;

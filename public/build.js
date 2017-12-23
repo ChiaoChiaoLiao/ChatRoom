@@ -69992,17 +69992,15 @@ var ChatRoom = function (_React$Component) {
         _this.handleAddMessageItem = _this.handleAddMessageItem.bind(_this);
         _this.toggleModal = _this.toggleModal.bind(_this);
         _this.getUsername = _this.getUsername.bind(_this);
-        _this.state = {
-            messageItems: []
-        };
         return _this;
     }
 
     _createClass(ChatRoom, [{
         key: 'handleAddMessageItem',
-        value: function handleAddMessageItem(classThis, snapshot, items) {
+        value: function handleAddMessageItem(classThis, snapshot) {
             console.log("add item snapshot ", snapshot);
 
+            var items = [];
             snapshot.forEach(function (doc) {
                 items.push({
                     id: doc.id,
@@ -70011,7 +70009,7 @@ var ChatRoom = function (_React$Component) {
                     timestamp: doc.data().timestamp
                 });
             });
-            classThis.setState({ messageItems: items });
+            classThis.props.dispatch({ type: 'ADD_MESSAGE', items: items });
         }
     }, {
         key: 'getUsername',
@@ -70055,7 +70053,7 @@ var ChatRoom = function (_React$Component) {
                     null,
                     'Chatting Room'
                 ),
-                _react2.default.createElement(_MessageList2.default, { items: this.state.messageItems, id: 'messageList' }),
+                _react2.default.createElement(_MessageList2.default, { items: this.props.messageItems, id: 'messageList' }),
                 _react2.default.createElement('hr', { style: lineStyle }),
                 _react2.default.createElement(_AddMessageForm2.default, { username: this.props.username })
             );
@@ -70068,19 +70066,21 @@ var ChatRoom = function (_React$Component) {
 function ListenToFirestore(classThis) {
     FirestoreDB.where("timestamp", ">", 0).onSnapshot(function (querySnapshot) {
         console.log("listen to firestore");
-        ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot, []);
+        ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot);
     });
 }
 
 ChatRoom.propTypes = {
     username: _propTypes2.default.string,
-    isOpen: _propTypes2.default.bool
+    isOpen: _propTypes2.default.bool,
+    messageItems: _propTypes2.default.array
 };
 
 function mapStateToProps(state) {
     return {
         username: state.username,
-        isOpen: state.isOpen
+        isOpen: state.isOpen,
+        messageItems: state.messageItems
     };
 }
 
@@ -70401,19 +70401,27 @@ var _redux = require('redux');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function reducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { username: "", isOpen: true };
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { username: "", isOpen: true, messageItems: [] };
     var action = arguments[1];
 
     switch (action.type) {
         case 'CHANGE_NAME':
             return {
                 username: action.value,
-                isOpen: state.isOpen
+                isOpen: state.isOpen,
+                messageItems: state.messageItems
             };
         case 'CLOSE':
             return {
                 username: state.username,
-                isOpen: false
+                isOpen: false,
+                messageItems: state.messageItems
+            };
+        case 'ADD_MESSAGE':
+            return {
+                username: state.username,
+                isOpen: state.isOpen,
+                messageItems: action.items
             };
         default:
             return state;

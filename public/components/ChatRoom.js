@@ -15,13 +15,11 @@ class ChatRoom extends React.Component {
         this.handleAddMessageItem = this.handleAddMessageItem.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.getUsername = this.getUsername.bind(this);
-        this.state = {
-            messageItems: []
-        }
     }
-    handleAddMessageItem(classThis, snapshot, items) {
+    handleAddMessageItem(classThis, snapshot) {
         console.log("add item snapshot ", snapshot);
 
+        var items = [];
         snapshot.forEach(function(doc) {
             items.push({
                 id: doc.id,
@@ -30,7 +28,7 @@ class ChatRoom extends React.Component {
                 timestamp: doc.data().timestamp
             });
         });
-        classThis.setState({messageItems: items});
+        classThis.props.dispatch({ type: 'ADD_MESSAGE', items: items });
     }
     getUsername(e){
         this.props.dispatch({ type: 'CHANGE_NAME', value: e.target.value });
@@ -59,7 +57,7 @@ class ChatRoom extends React.Component {
         return(
             <div className="chatRoom">
               <h1>Chatting Room</h1>
-              <MessageList items={this.state.messageItems} id="messageList"/>
+              <MessageList items={this.props.messageItems} id="messageList"/>
               <hr style={lineStyle}/>
               <AddMessageForm username={this.props.username}/>
             </div>
@@ -71,19 +69,21 @@ function ListenToFirestore(classThis) {
     FirestoreDB.where("timestamp", ">", 0)
     .onSnapshot(function(querySnapshot) {
         console.log("listen to firestore");
-        ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot, []);
+        ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot);
     });
 }
 
 ChatRoom.propTypes = {
     username: PropTypes.string,
-    isOpen: PropTypes.bool
+    isOpen: PropTypes.bool,
+    messageItems: PropTypes.array
 }
 
 function mapStateToProps(state) {
     return {
         username: state.username,
-        isOpen: state.isOpen
+        isOpen: state.isOpen,
+        messageItems: state.messageItems
     };
 }
 

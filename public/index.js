@@ -4,17 +4,25 @@ import ChatRoom from './components/ChatRoom';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 
-function reducer(state = {username: "", isOpen: true}, action) {
+function reducer(state = {username: "", isOpen: true, messageItems:[]}, action) {
     switch(action.type) {
         case 'CHANGE_NAME':
             return {
                 username: action.value,
-                isOpen: state.isOpen
+                isOpen: state.isOpen,
+                messageItems: state.messageItems
             };
         case 'CLOSE':
             return {
                 username: state.username,
-                isOpen: false
+                isOpen: false,
+                messageItems: state.messageItems
+            };
+        case 'ADD_MESSAGE':
+            return {
+                username: state.username,
+                isOpen: state.isOpen,
+                messageItems: action.items
             };
         default:
             return state;

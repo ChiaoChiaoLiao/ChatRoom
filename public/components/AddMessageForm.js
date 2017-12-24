@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Avatar from 'material-ui/Avatar';
 import {AddMessageToFirestore} from '../utils/firestore-utils';
 import {isEmptyOrSpaces} from '../utils/functions';
 
@@ -27,12 +29,20 @@ class AddMessageForm extends React.Component {
         }
     }
     render() {
+        const {username} = this.props;
+        var marginStyle = {
+            margin: "5px"
+        };
         return (
             <div>
-              <input type="text" value={this.state.messageText}
+              <MuiThemeProvider style={marginStyle}>
+                <Avatar>{username.substring(0, 2).toUpperCase()}</Avatar>
+              </MuiThemeProvider>
+              <input type="text" style={marginStyle}
+                     value={this.state.messageText}
                      onKeyUp={(e) => this.handleKeyUp(e)}
                      onChange={this.handleTextChange}/>
-              <button onClick={this.handleAddMessageToFirestore}>Send</button>
+              <button style={marginStyle} onClick={this.handleAddMessageToFirestore}>Send</button>
             </div>
         );
     }

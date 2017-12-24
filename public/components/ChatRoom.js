@@ -6,6 +6,7 @@ import AddMessageForm from './AddMessageForm';
 import {connect} from 'react-redux';
 import {GetFirestore} from '../utils/firebase-config';
 import {isEmptyOrSpaces} from '../utils/functions';
+import {addMessageAction, changeNameAction, closeModalAction} from '../actions/actions';
 
 const FirestoreDB = GetFirestore();
 
@@ -28,10 +29,10 @@ class ChatRoom extends React.Component {
                 timestamp: doc.data().timestamp
             });
         });
-        classThis.props.dispatch({ type: 'ADD_MESSAGE', items: items });
+        classThis.props.dispatch(addMessageAction(items));
     }
     getUsername(e){
-        this.props.dispatch({ type: 'CHANGE_NAME', value: e.target.value });
+        this.props.dispatch(changeNameAction(e.target.value));
     }
     toggleModal() {
         console.log("toggle  " + this.props.username);
@@ -39,7 +40,7 @@ class ChatRoom extends React.Component {
             return;
         }
         ListenToFirestore(this);
-        this.props.dispatch({ type: 'CLOSE' });
+        this.props.dispatch(closeModalAction());
     }
     render() {
         if (this.props.isOpen) {

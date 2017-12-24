@@ -69845,6 +69845,44 @@ module.exports = warning;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.addMessageAction = addMessageAction;
+exports.changeNameAction = changeNameAction;
+exports.closeModalAction = closeModalAction;
+
+var _types = require('./types');
+
+var actionTypes = _interopRequireWildcard(_types);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function addMessageAction(items) {
+    return { type: actionTypes.ADD_MESSAGE, items: items };
+}
+
+function changeNameAction(name) {
+    return { type: actionTypes.CHANGE_NAME, value: name };
+}
+
+function closeModalAction() {
+    return { type: actionTypes.CLOSE_MODAL };
+}
+
+},{"./types":459}],459:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ADD_MESSAGE = exports.ADD_MESSAGE = 'ADD_MESSAGE';
+var CHANGE_NAME = exports.CHANGE_NAME = 'CHANGE_NAME';
+var CLOSE_MODAL = exports.CLOSE_MODAL = 'CLOSE_MODAL';
+
+},{}],460:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -69855,6 +69893,14 @@ var _react2 = _interopRequireDefault(_react);
 var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _MuiThemeProvider = require('material-ui/styles/MuiThemeProvider');
+
+var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+
+var _Avatar = require('material-ui/Avatar');
+
+var _Avatar2 = _interopRequireDefault(_Avatar);
 
 var _firestoreUtils = require('../utils/firestore-utils');
 
@@ -69910,17 +69956,32 @@ var AddMessageForm = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
+            var username = this.props.username;
+
+            var marginStyle = {
+                margin: "5px"
+            };
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement('input', { type: 'text', value: this.state.messageText,
+                _react2.default.createElement(
+                    _MuiThemeProvider2.default,
+                    { style: marginStyle },
+                    _react2.default.createElement(
+                        _Avatar2.default,
+                        null,
+                        username.substring(0, 2).toUpperCase()
+                    )
+                ),
+                _react2.default.createElement('input', { type: 'text', style: marginStyle,
+                    value: this.state.messageText,
                     onKeyUp: function onKeyUp(e) {
                         return _this2.handleKeyUp(e);
                     },
                     onChange: this.handleTextChange }),
                 _react2.default.createElement(
                     'button',
-                    { onClick: this.handleAddMessageToFirestore },
+                    { style: marginStyle, onClick: this.handleAddMessageToFirestore },
                     'Send'
                 )
             );
@@ -69936,7 +69997,7 @@ AddMessageForm.propTypes = {
 
 exports.default = AddMessageForm;
 
-},{"../utils/firestore-utils":464,"../utils/functions":465,"prop-types":422,"react":444}],459:[function(require,module,exports){
+},{"../utils/firestore-utils":467,"../utils/functions":468,"material-ui/Avatar":402,"material-ui/styles/MuiThemeProvider":403,"prop-types":422,"react":444}],461:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -69970,6 +70031,8 @@ var _reactRedux = require('react-redux');
 var _firebaseConfig = require('../utils/firebase-config');
 
 var _functions = require('../utils/functions');
+
+var _actions = require('../actions/actions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70009,12 +70072,12 @@ var ChatRoom = function (_React$Component) {
                     timestamp: doc.data().timestamp
                 });
             });
-            classThis.props.dispatch({ type: 'ADD_MESSAGE', items: items });
+            classThis.props.dispatch((0, _actions.addMessageAction)(items));
         }
     }, {
         key: 'getUsername',
         value: function getUsername(e) {
-            this.props.dispatch({ type: 'CHANGE_NAME', value: e.target.value });
+            this.props.dispatch((0, _actions.changeNameAction)(e.target.value));
         }
     }, {
         key: 'toggleModal',
@@ -70024,7 +70087,7 @@ var ChatRoom = function (_React$Component) {
                 return;
             }
             ListenToFirestore(this);
-            this.props.dispatch({ type: 'CLOSE' });
+            this.props.dispatch((0, _actions.closeModalAction)());
         }
     }, {
         key: 'render',
@@ -70086,7 +70149,7 @@ function mapStateToProps(state) {
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(ChatRoom);
 
-},{"../utils/firebase-config":463,"../utils/functions":465,"./AddMessageForm":458,"./MessageList":460,"./Modal":461,"prop-types":422,"react":444,"react-redux":436}],460:[function(require,module,exports){
+},{"../actions/actions":458,"../utils/firebase-config":466,"../utils/functions":468,"./AddMessageForm":460,"./MessageList":462,"./Modal":463,"prop-types":422,"react":444,"react-redux":436}],462:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70251,7 +70314,7 @@ MessageList.propTypes = {
 
 exports.default = MessageList;
 
-},{"material-ui/Avatar":402,"material-ui/styles/MuiThemeProvider":403,"prop-types":422,"react":444,"react-dom":426}],461:[function(require,module,exports){
+},{"material-ui/Avatar":402,"material-ui/styles/MuiThemeProvider":403,"prop-types":422,"react":444,"react-dom":426}],463:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -70379,7 +70442,7 @@ Modal.propTypes = {
 
 exports.default = Modal;
 
-},{"prop-types":422,"react":444}],462:[function(require,module,exports){
+},{"prop-types":422,"react":444}],464:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -70398,26 +70461,50 @@ var _reactRedux = require('react-redux');
 
 var _redux = require('redux');
 
+var _reducers = require('./reducers/reducers');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var store = (0, _redux.createStore)(_reducers.reducer);
+
+_reactDom2.default.render(_react2.default.createElement(
+  _reactRedux.Provider,
+  { store: store },
+  _react2.default.createElement(_ChatRoom2.default, null)
+), document.getElementById("root"));
+
+},{"./components/ChatRoom":461,"./reducers/reducers":465,"react":444,"react-dom":426,"react-redux":436,"redux":451}],465:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.reducer = reducer;
+
+var _types = require("../actions/types");
+
+var actionTypes = _interopRequireWildcard(_types);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function reducer() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { username: "", isOpen: true, messageItems: [] };
     var action = arguments[1];
 
     switch (action.type) {
-        case 'CHANGE_NAME':
+        case actionTypes.CHANGE_NAME:
             return {
                 username: action.value,
                 isOpen: state.isOpen,
                 messageItems: state.messageItems
             };
-        case 'CLOSE':
+        case actionTypes.CLOSE_MODAL:
             return {
                 username: state.username,
                 isOpen: false,
                 messageItems: state.messageItems
             };
-        case 'ADD_MESSAGE':
+        case actionTypes.ADD_MESSAGE:
             return {
                 username: state.username,
                 isOpen: state.isOpen,
@@ -70428,15 +70515,7 @@ function reducer() {
     }
 }
 
-var store = (0, _redux.createStore)(reducer);
-
-_reactDom2.default.render(_react2.default.createElement(
-    _reactRedux.Provider,
-    { store: store },
-    _react2.default.createElement(_ChatRoom2.default, null)
-), document.getElementById("root"));
-
-},{"./components/ChatRoom":459,"react":444,"react-dom":426,"react-redux":436,"redux":451}],463:[function(require,module,exports){
+},{"../actions/types":459}],466:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -70468,7 +70547,7 @@ function GetFirestore() {
     return db.collection(DBName);
 }
 
-},{"firebase":360,"firebase/firestore":359}],464:[function(require,module,exports){
+},{"firebase":360,"firebase/firestore":359}],467:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -70501,7 +70580,7 @@ function DetatchListener() {
     unsubscribe();
 }
 
-},{"./firebase-config.js":463}],465:[function(require,module,exports){
+},{"./firebase-config.js":466}],468:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -70512,4 +70591,4 @@ function isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;
 }
 
-},{}]},{},[462]);
+},{}]},{},[464]);

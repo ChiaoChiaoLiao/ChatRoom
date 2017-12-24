@@ -4,20 +4,19 @@ import PropTypes from 'prop-types';
 import MessageList from './MessageList';
 import AddMessageForm from './AddMessageForm';
 import {connect} from 'react-redux';
-import {GetFirestore} from '../utils/firebase-config';
+import {getFirestore} from '../utils/firebase-config';
 import {isEmptyOrSpaces} from '../utils/functions';
 import {addMessageAction, changeNameAction, closeModalAction} from '../actions/actions';
 
-const FirestoreDB = GetFirestore();
+const FirestoreDB = getFirestore();
 
 class ChatRoom extends React.Component {
     constructor(props) {
         super(props);
-        this.handleAddMessageItem = this.handleAddMessageItem.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.getUsername = this.getUsername.bind(this);
     }
-    handleAddMessageItem(classThis, snapshot) {
+    handleAddMessageItem(Comp, snapshot) {
         console.log("add item snapshot ", snapshot);
 
         var items = [];
@@ -29,7 +28,7 @@ class ChatRoom extends React.Component {
                 timestamp: doc.data().timestamp
             });
         });
-        classThis.props.dispatch(addMessageAction(items));
+        Comp.props.dispatch(addMessageAction(items));
     }
     getUsername(e){
         this.props.dispatch(changeNameAction(e.target.value));
@@ -39,8 +38,15 @@ class ChatRoom extends React.Component {
         if (isEmptyOrSpaces(this.props.username)) {
             return;
         }
-        ListenToFirestore(this);
+        this.listenToFirestore(this);
         this.props.dispatch(closeModalAction());
+    }
+    listenToFirestore(Comp) {
+        FirestoreDB.where("timestamp", ">", 0)
+        .onSnapshot(function(querySnapshot) {
+            console.log("listen to firestore");
+            ChatRoom.prototype.handleAddMessageItem(Comp, querySnapshot);
+        });
     }
     render() {
         if (this.props.isOpen) {
@@ -64,14 +70,6 @@ class ChatRoom extends React.Component {
             </div>
         );
     }
-}
-
-function ListenToFirestore(classThis) {
-    FirestoreDB.where("timestamp", ">", 0)
-    .onSnapshot(function(querySnapshot) {
-        console.log("listen to firestore");
-        ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot);
-    });
 }
 
 ChatRoom.propTypes = {

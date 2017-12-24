@@ -12,7 +12,7 @@ Firebase.initializeApp({
 // Initialize Cloud Firestore through Firebase
 var db = Firebase.firestore();
 
-export function GetFirestore() {
+export function getFirestore() {
     console.log("get firestore");
     return db.collection(DBName);
 }

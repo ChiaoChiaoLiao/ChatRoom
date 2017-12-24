@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Avatar from 'material-ui/Avatar';
-import {AddMessageToFirestore} from '../utils/firestore-utils';
+import {addMessageToFirestore} from '../utils/firestore-utils';
 import {isEmptyOrSpaces} from '../utils/functions';
 
 class AddMessageForm extends React.Component {
@@ -24,7 +24,7 @@ class AddMessageForm extends React.Component {
     handleAddMessageToFirestore() {
         const {username} = this.props;
         if (!isEmptyOrSpaces(this.state.messageText)) {
-            AddMessageToFirestore(username, this.state.messageText);
+            addMessageToFirestore(username, this.state.messageText);
             this.setState({messageText: ""});
         }
     }

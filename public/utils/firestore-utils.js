@@ -1,8 +1,8 @@
-import {GetFirestore} from './firebase-config.js';
+import {getFirestore} from './firebase-config.js';
 
-const FirestoreDB = GetFirestore();
+const FirestoreDB = getFirestore();
 
-export function AddMessageToFirestore(user, msg) {
+export function addMessageToFirestore(user, msg) {
     console.log("ADD to firestore= " + user + ": " + msg);
     var timestamp = new Date().getTime();
     var newMessage = {
@@ -20,7 +20,7 @@ export function AddMessageToFirestore(user, msg) {
         });
 }
 
-export function DetatchListener() {
+export function detatchListener() {
     var unsubscribe = FirestoreDB.collection(DBName)
         .onSnapshot(function () {});
     unsubscribe();

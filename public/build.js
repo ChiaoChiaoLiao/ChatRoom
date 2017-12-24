@@ -69947,7 +69947,7 @@ var AddMessageForm = function (_React$Component) {
             var username = this.props.username;
 
             if (!(0, _functions.isEmptyOrSpaces)(this.state.messageText)) {
-                (0, _firestoreUtils.AddMessageToFirestore)(username, this.state.messageText);
+                (0, _firestoreUtils.addMessageToFirestore)(username, this.state.messageText);
                 this.setState({ messageText: "" });
             }
         }
@@ -70042,7 +70042,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var FirestoreDB = (0, _firebaseConfig.GetFirestore)();
+var FirestoreDB = (0, _firebaseConfig.getFirestore)();
 
 var ChatRoom = function (_React$Component) {
     _inherits(ChatRoom, _React$Component);
@@ -70052,7 +70052,6 @@ var ChatRoom = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props));
 
-        _this.handleAddMessageItem = _this.handleAddMessageItem.bind(_this);
         _this.toggleModal = _this.toggleModal.bind(_this);
         _this.getUsername = _this.getUsername.bind(_this);
         return _this;
@@ -70060,7 +70059,7 @@ var ChatRoom = function (_React$Component) {
 
     _createClass(ChatRoom, [{
         key: 'handleAddMessageItem',
-        value: function handleAddMessageItem(classThis, snapshot) {
+        value: function handleAddMessageItem(Comp, snapshot) {
             console.log("add item snapshot ", snapshot);
 
             var items = [];
@@ -70072,7 +70071,7 @@ var ChatRoom = function (_React$Component) {
                     timestamp: doc.data().timestamp
                 });
             });
-            classThis.props.dispatch((0, _actions.addMessageAction)(items));
+            Comp.props.dispatch((0, _actions.addMessageAction)(items));
         }
     }, {
         key: 'getUsername',
@@ -70086,8 +70085,16 @@ var ChatRoom = function (_React$Component) {
             if ((0, _functions.isEmptyOrSpaces)(this.props.username)) {
                 return;
             }
-            ListenToFirestore(this);
+            this.listenToFirestore(this);
             this.props.dispatch((0, _actions.closeModalAction)());
+        }
+    }, {
+        key: 'listenToFirestore',
+        value: function listenToFirestore(Comp) {
+            FirestoreDB.where("timestamp", ">", 0).onSnapshot(function (querySnapshot) {
+                console.log("listen to firestore");
+                ChatRoom.prototype.handleAddMessageItem(Comp, querySnapshot);
+            });
         }
     }, {
         key: 'render',
@@ -70125,13 +70132,6 @@ var ChatRoom = function (_React$Component) {
 
     return ChatRoom;
 }(_react2.default.Component);
-
-function ListenToFirestore(classThis) {
-    FirestoreDB.where("timestamp", ">", 0).onSnapshot(function (querySnapshot) {
-        console.log("listen to firestore");
-        ChatRoom.prototype.handleAddMessageItem(classThis, querySnapshot);
-    });
-}
 
 ChatRoom.propTypes = {
     username: _propTypes2.default.string,
@@ -70521,7 +70521,7 @@ function reducer() {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.GetFirestore = GetFirestore;
+exports.getFirestore = getFirestore;
 
 var _firebase = require("firebase");
 
@@ -70542,7 +70542,7 @@ _firebase2.default.initializeApp({
 // Initialize Cloud Firestore through Firebase
 var db = _firebase2.default.firestore();
 
-function GetFirestore() {
+function getFirestore() {
     console.log("get firestore");
     return db.collection(DBName);
 }
@@ -70553,14 +70553,14 @@ function GetFirestore() {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.AddMessageToFirestore = AddMessageToFirestore;
-exports.DetatchListener = DetatchListener;
+exports.addMessageToFirestore = addMessageToFirestore;
+exports.detatchListener = detatchListener;
 
 var _firebaseConfig = require("./firebase-config.js");
 
-var FirestoreDB = (0, _firebaseConfig.GetFirestore)();
+var FirestoreDB = (0, _firebaseConfig.getFirestore)();
 
-function AddMessageToFirestore(user, msg) {
+function addMessageToFirestore(user, msg) {
     console.log("ADD to firestore= " + user + ": " + msg);
     var timestamp = new Date().getTime();
     var newMessage = {
@@ -70575,7 +70575,7 @@ function AddMessageToFirestore(user, msg) {
     });
 }
 
-function DetatchListener() {
+function detatchListener() {
     var unsubscribe = FirestoreDB.collection(DBName).onSnapshot(function () {});
     unsubscribe();
 }
